@@ -1,0 +1,33 @@
+/restoapplaravel/node_modules
+/restoapplaravel/public/hot
+/restoapplaravel/public/storage
+/restoapplaravel/storage/*.key
+/restoapplaravel/vendor
+/restoapplaravel.env
+/restoapplaravel.env.backup
+/restoapplaravel.phpunit.result.cache
+/restoapplaravelHomestead.json
+/restoapplaravelHomestead.yaml
+/restoapplaravelnpm-debug.log
+/restoapplaravelyarn-error.log
+# dependencies
+/restoappreact/node_modules
+/restoappreact/.pnp
+/restoappreact/.pnp.js
+
+# testing
+/restoappreact//coverage
+
+# production
+/restoappreact//build
+
+# misc
+/restoappreact/.DS_Store
+/restoappreact/.env.local
+/restoappreact/.env.development.local
+/restoappreact/.env.test.local
+/restoappreact/.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
