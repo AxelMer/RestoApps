@@ -14,9 +14,9 @@ class CreateMesasTable extends Migration
     public function up()
     {
         Schema::create('mesas', function (Blueprint $table) {
-            $table->bigIncrements('id_mesas');
+            $table->integer('id')->autoIncrement();
             $table->integer('numeroDeMesa');
-            $table->boolean('Estado');
+            $table->boolean('estado');
             $table->timestamps();
         });
     }
