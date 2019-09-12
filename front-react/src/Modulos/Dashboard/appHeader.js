@@ -2,17 +2,6 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import { makeStyles, Drawer, AppBar, CssBaseline, Toolbar, List, Typography } from '@material-ui/core';
 import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-
-/* import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';*/
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 
