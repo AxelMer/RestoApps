@@ -6,7 +6,7 @@ import Home from './Modulos/Dashboard/home';
 import Cuenta from './Modulos/Dashboard/Cuenta';
 import Salon from './Modulos/Dashboard/Salon';
 import Menu from './Modulos/Dashboard/Menu';
-import Login from './Modulos/Login/login';
+import Login from './Modulos/Login/index';
 
 function App() {
   return (

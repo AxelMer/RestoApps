@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState }  from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -33,9 +33,10 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.text.primary,
   },
 }));
-
-export default function SignIn() {
+const Login = () => {
+export function SignIn() {
   const classes = useStyles();
+
 
   return (
     <Container component="main" maxWidth="xs">
@@ -87,4 +88,4 @@ export default function SignIn() {
       </div>
     </Container>
   );
-}
+}}
