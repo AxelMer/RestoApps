@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\mesas;
+use App\categorias;
 use Illuminate\Http\Request;
 
-class MesasController extends Controller
+class CategoriasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,6 +16,8 @@ class MesasController extends Controller
     {
         //
     }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -31,22 +33,23 @@ class MesasController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\mesas  $mesas
+     * @param  \App\categorias  $categorias
      * @return \Illuminate\Http\Response
      */
-    public function show(mesas $mesas)
+    public function show(categorias $categorias)
     {
         //
     }
+
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\mesas  $mesas
+     * @param  \App\categorias  $categorias
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, mesas $mesas)
+    public function update(Request $request, categorias $categorias)
     {
         //
     }
@@ -54,10 +57,10 @@ class MesasController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\mesas  $mesas
+     * @param  \App\categorias  $categorias
      * @return \Illuminate\Http\Response
      */
-    public function destroy(mesas $mesas)
+    public function destroy(categorias $categorias)
     {
         //
     }

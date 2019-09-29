@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\mesas;
+use App\pedidos;
 use Illuminate\Http\Request;
 
-class MesasController extends Controller
+class PedidosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,22 +31,23 @@ class MesasController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\mesas  $mesas
+     * @param  \App\pedidos  $pedidos
      * @return \Illuminate\Http\Response
      */
-    public function show(mesas $mesas)
+    public function show(pedidos $pedidos)
     {
         //
     }
+
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\mesas  $mesas
+     * @param  \App\pedidos  $pedidos
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, mesas $mesas)
+    public function update(Request $request, pedidos $pedidos)
     {
         //
     }
@@ -54,10 +55,10 @@ class MesasController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\mesas  $mesas
+     * @param  \App\pedidos  $pedidos
      * @return \Illuminate\Http\Response
      */
-    public function destroy(mesas $mesas)
+    public function destroy(pedidos $pedidos)
     {
         //
     }
