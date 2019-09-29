@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateMesasTable extends Migration
 {
@@ -14,9 +14,9 @@ class CreateMesasTable extends Migration
     public function up()
     {
         Schema::create('mesas', function (Blueprint $table) {
-            $table->integer('id')->autoIncrement();
-            $table->integer('numeroDeMesa');
-            $table->boolean('estado');
+            $table->increments('id');
+            $table->smallInteger('capacidad');
+            $table->boolean('estado')->default(false);
             $table->timestamps();
         });
     }
