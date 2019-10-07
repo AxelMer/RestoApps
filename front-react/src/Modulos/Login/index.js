@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import  Avatar from '@material-ui/core/Avatar';
-import FastfoodIcon from '@material-ui/icons/Fastfood'; 
+import FastfoodIcon from '@material-ui/icons/Fastfood';
 export default class Login extends Component{
   constructor(props) {
     super(props);
@@ -19,7 +19,7 @@ export default class Login extends Component{
     const data = { cuenta: this.state.cuenta, password: this.state.password };
 
     axios
-      .post("http://localhost:8000/api/auth/login", data)
+      .get("http://localhost:8000/api/auth/login", data)
       .then(res => {
         cookie.set("token", res.data.access_token);
         this.props.setLogin(res.data.user);

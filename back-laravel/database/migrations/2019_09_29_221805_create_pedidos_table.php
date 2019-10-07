@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreatePedidosTable extends Migration
 {
@@ -14,9 +14,7 @@ class CreatePedidosTable extends Migration
     public function up()
     {
         Schema::create('pedidos', function (Blueprint $table) {
-            $table->integer('id')->autoIncrement();
-            $table->string('descripcion');
-            $table->dateTime('creado');
+            $table->bigIncrements('id');
             $table->timestamps();
         });
     }
