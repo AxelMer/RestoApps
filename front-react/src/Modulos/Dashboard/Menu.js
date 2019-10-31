@@ -93,7 +93,7 @@ const columns = [
     const [rowsPerPage] = React.useState(1000);
     const [open, setOpen] = React.useState(false);
     const [values, setValues] = React.useState({
-      estado: '',
+      tipo: '',
       name: 'hai',
     });
 
@@ -141,13 +141,13 @@ const columns = [
               type="number"
             />
             <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="estado">Tipo</InputLabel>
+            <InputLabel htmlFor="tipo">Tipo</InputLabel>
              <Select
-               value={values.estado}
+               value={values.tipo}
                 onChange={handleChange}
                 inputProps={{
-                 name: 'Categoria',
-                 id: 'tipo',
+                 name: 'tipo',
+                 id: 'Tipo',
                 }}
                 >
           <MenuItem value={10}>Bebida</MenuItem>
