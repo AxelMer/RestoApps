@@ -1,6 +1,7 @@
 import React from 'react';
 import '../../App.css';
 import Appheader from '../../componentes/appHeader';
+import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -11,6 +12,11 @@ import TableRow from '@material-ui/core/TableRow';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 
     const columns = [
@@ -32,9 +38,11 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
         },
       ];
       
+      
       function createData(nombre, perfil, antiguedad, cargo) {
         return { nombre, perfil, antiguedad, cargo };
       }
+
       
       const rows = [
         createData('Roberto Perez', 'ADMIN', 20, 'Gerente'),
@@ -54,7 +62,7 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
         createData('Bruno Martinez', 'COCINA', 11,'Jefe de Cocina'),
       ];
       
-      const useStyles = makeStyles({
+      const useStyles = makeStyles(theme => ({
         root: {
           width: '100%',
         },
@@ -62,12 +70,22 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
           maxHeight: 600,
           overflow: 'auto',
         },
-      });
-      
+      }));
+
+
       export default function StickyHeadTable() {
         const classes = useStyles();
         const [page] = React.useState(0);
         const [rowsPerPage] = React.useState(1000);
+        const [open, setOpen] = React.useState(false);
+
+        const handleClickOpen = () => {
+          setOpen(true);
+        };
+      
+        const handleClose = () => {
+          setOpen(false);
+        };  
     
         return (
           <div>
@@ -78,7 +96,57 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
         </div>
           <Grid item xs={12} className="Botonera">
           <ButtonGroup fullWidth aria-label="full width outlined button group" variant="contained" color="primary" >
-            <Button>Nueva Cuenta</Button>
+            <Button onClick={handleClickOpen}>
+            Nueva Cuenta
+            </Button>
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+              <DialogTitle id="form-dialog-title">Nueva Cuenta</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Ingrese los datos del personal.
+                  </DialogContentText>
+                  <TextField
+                  autoFocus
+                  margin="dense"
+                  id="name"
+                  label="Nombre"
+                  type="text"
+                  fullWidth
+                   />
+                  <TextField
+                  autoFocus
+                  margin="dense"
+                  id="perfil"
+                  label="Perfil"
+                  type="text"
+                  fullWidth
+                   />
+                  <TextField
+                  autoFocus
+                  margin="dense"
+                  id="antiguedad"
+                  label="Antiguedad"
+                  type="number"
+                  fullWidth
+                   />
+                  <TextField
+                  autoFocus
+                  margin="dense"
+                  id="cargo"
+                  label="cargo"
+                  type="text"
+                  fullWidth
+                   />
+               </DialogContent>
+               <DialogActions>
+               <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleClose} color="primary">
+            Aceptar
+          </Button>
+        </DialogActions>
+      </Dialog>
             <Button>Editar Cuenta</Button>
             <Button>Eliminar Cuenta</Button>
           </ButtonGroup>
