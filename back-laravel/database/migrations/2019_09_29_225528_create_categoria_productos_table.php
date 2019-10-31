@@ -14,7 +14,10 @@ class CreateCategoriaProductosTable extends Migration
     public function up()
     {
         Schema::create('categoria_productos', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->Increments('id');
+            $table->Integer('producto_id')->unsigned();
+            $table->Integer('categoria_id')->unsigned();
+            
             $table->timestamps();
         });
     }

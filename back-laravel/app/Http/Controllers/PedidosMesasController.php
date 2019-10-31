@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\pedidos;
+use App\pedidos_mesas;
 use Illuminate\Http\Request;
 
-class PedidosController extends Controller
+class PedidosMesasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,6 +13,16 @@ class PedidosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
     {
         //
     }
@@ -31,23 +41,33 @@ class PedidosController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\pedidos  $pedidos
+     * @param  \App\pedidos_mesas  $pedidos_mesas
      * @return \Illuminate\Http\Response
      */
-    public function show(pedidos $pedidos)
+    public function show(pedidos_mesas $pedidos_mesas)
     {
         //
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\pedidos_mesas  $pedidos_mesas
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(pedidos_mesas $pedidos_mesas)
+    {
+        //
+    }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\pedidos  $pedidos
+     * @param  \App\pedidos_mesas  $pedidos_mesas
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, pedidos $pedidos)
+    public function update(Request $request, pedidos_mesas $pedidos_mesas)
     {
         //
     }
@@ -55,10 +75,10 @@ class PedidosController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\pedidos  $pedidos
+     * @param  \App\pedidos_mesas  $pedidos_mesas
      * @return \Illuminate\Http\Response
      */
-    public function destroy(pedidos $pedidos)
+    public function destroy(pedidos_mesas $pedidos_mesas)
     {
         //
     }

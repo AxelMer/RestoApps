@@ -1,38 +1,66 @@
-import React from 'react';
+import React, { useState, useEffect  } from 'react';
 import '../../App.css';
 import Appheader from '../../componentes/appHeader';
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
+import axios from 'axios';
 
 
-    const columns = [
-        { id: 'nombre', label: 'NOMBRE', minWidth: 100 },
-        { id: 'perfil', label: 'PERFIL', minWidth: 100 },
-        {
-          id: 'antiguedad',
-          label: 'ANTIGUEDAD (años)',
-          minWidth: 120,
-          align: 'right',
-          format: value => value.toLocaleString(),
-        },
-        {
-          id: 'cargo',
-          label: 'CARGO',
-          minWidth: 120,
-          align: 'right',
-          format: value => value.toLocaleString(),
-        },
-      ];
-      
-      function createData(nombre, perfil, antiguedad, cargo) {
+  export default function ListaUsuarios(){
+    const [User, setUser] = useState({hits:[]});
+    useEffect(async () => {
+      const result = await axios(
+        'http://localhost:8000/User',
+      );
+      setUser(result.User);
+    });
+    return(
+      <div>
+            <div className="cuenta">
+            <Appheader/>
+            <div> Administrador de cuentas</div>
+            </div>
+            <table class="table table-bordered order-table ">
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Descripcion</th>
+                  <th>Precio</th>
+                </tr>
+              </thead>
+              <tbody id="bodytable">
+                   {User.map(item =>(
+                      <tr>
+                       <td>{item.id}</td>
+                       <td>{item.name}</td>
+                       <td>{item.email}</td>
+                      </tr>
+                   )
+                   )}
+              </tbody>
+            </table>
+
+      </div>
+    )
+  } 
+  /*const columns = [
+    { id: 'nombre', label: 'NOMBRE', minWidth: 100 },
+    { id: 'perfil', label: 'PERFIL', minWidth: 100 },
+    {
+      id: 'antiguedad',
+      label: 'ANTIGUEDAD (años)',
+      minWidth: 120,
+      align: 'right',
+      format: value => value.toLocaleString(),
+    },
+    {
+      id: 'cargo',
+      label: 'CARGO',
+      minWidth: 120,
+      align: 'right',
+      format: value => value.toLocaleString(),
+    },
+  ];*/
+   /*   function createData(nombre, perfil, antiguedad, cargo) {
+        const [User, setUser] = useState();
         return { nombre, perfil, antiguedad, cargo };
       }
       
@@ -121,3 +149,4 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
           </div>
         );
       }
+*/

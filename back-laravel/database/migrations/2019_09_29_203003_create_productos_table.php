@@ -17,7 +17,7 @@ class CreateProductosTable extends Migration
             $table->increments('id');
             $table->string('articulo', 100);
             $table->decimal('precio', 10 ,2);
-            $table->int('cantidad')->nullable();
+            $table->integer('cantidad')->nullable();
             $table->timestamps();
         });
     }

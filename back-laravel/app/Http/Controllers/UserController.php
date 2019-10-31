@@ -14,7 +14,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $user = User::all();
+         //response()->json([$user]);
+         return $user->toArray();
     }
 
 
@@ -27,7 +29,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
@@ -36,9 +38,10 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show($id)
     {
-        //
+        $edit = User::find($id);
+        return $edit->toArray();
     }
 
     /**
