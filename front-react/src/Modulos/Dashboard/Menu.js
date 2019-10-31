@@ -168,9 +168,9 @@ const columns = [
       <Button>Eliminar</Button>
         <InputBase
         className={classes.input}
-        placeholder="Buscar..."
-        
-        inputProps={{ 'aria-label': 'search google ' ,}} //ponerle color
+        style={{height: 40, background:'white', borderWidth: 1, color : "black" }}
+        placeholder= "Buscar..."
+        inputProps={{ 'aria-label': 'search google ' ,}} 
       />
       </ButtonGroup>
     </Grid>
