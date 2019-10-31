@@ -100,10 +100,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
             Nueva Cuenta
             </Button>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-              <DialogTitle id="form-dialog-title">Nueva Cuenta</DialogTitle>
+              <DialogTitle id="form-dialog-title"> NUEVA CUENTA </DialogTitle>
                 <DialogContent>
                   <DialogContentText>
-                    Ingrese los datos del personal.
+                    Ingrese los datos del personal autorizado.
                   </DialogContentText>
                   <TextField
                   autoFocus
@@ -114,7 +114,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
                   fullWidth
                    />
                   <TextField
-                  autoFocus
                   margin="dense"
                   id="perfil"
                   label="Perfil"
@@ -122,7 +121,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
                   fullWidth
                    />
                   <TextField
-                  autoFocus
                   margin="dense"
                   id="antiguedad"
                   label="Antiguedad"
@@ -130,10 +128,9 @@ import DialogTitle from '@material-ui/core/DialogTitle';
                   fullWidth
                    />
                   <TextField
-                  autoFocus
                   margin="dense"
                   id="cargo"
-                  label="cargo"
+                  label="Cargo"
                   type="text"
                   fullWidth
                    />
