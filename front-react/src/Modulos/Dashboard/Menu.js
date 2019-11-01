@@ -12,9 +12,19 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import InputBase from '@material-ui/core/InputBase';
+
 //import { Icon } from '@material-ui/core';
 //import {FindInPage} from '@material-ui/icons';
 
+import MenuItem from '@material-ui/core/MenuItem';
+import DialogActions from '@material-ui/core/DialogActions';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import TextField from '@material-ui/core/TextField';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
     
 const columns = [
     { id: 'mercaderia', label: 'MERCADERIA', minWidth: 100 },
@@ -57,24 +67,55 @@ const columns = [
     createData("Pizza de Jamón y Morrones", "$270", "Pizzas" ),
   ];
   
-  const useStyles = makeStyles({
+  const useStyles = makeStyles(theme =>({
     root: {
       width: '100%',
+      display: 'flex',
+      flexWrap: 'wrap',
     },
     tableWrapper: {
       maxHeight: 600,
       overflow: 'auto',
+      width: '100%',
     },
     input: {
       paddingLeft: '20px',
       color: 'white',
-    }
-  });
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120,
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2),
+    },
+  }));
   
   export default function StickyHeadTable() {
     const classes = useStyles();
     const [page] = React.useState(0);
     const [rowsPerPage] = React.useState(1000);
+    const [open, setOpen] = React.useState(false);
+    const [values, setValues] = React.useState({
+      tipo: '',
+      name: 'hai',
+    });
+
+      
+    const handleChange = event => {
+      setValues(oldValues => ({
+        ...oldValues,
+        [event.target.name]: event.target.value,
+      }));
+    };
+
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
 
     return (
       <div>
@@ -85,13 +126,55 @@ const columns = [
       <Grid item xs={12} className="Botonera">
       <ButtonGroup fullWidth aria-label="full width outlined button group" variant="contained" color="primary" >
         <Button>Ver cocina</Button>
-        <Button>Agregar Producto</Button>
-        <Button>Eliminar</Button>
+        <Button onClick={handleClickOpen}>Agregar Producto</Button>
+        <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Agregar Producto a Base de Datos </DialogTitle>
+        <DialogContent>
+            <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Producto"
+            type="text"
+            fullWidth
+          />
+            <TextField
+              margin="dense"
+              id="Precio"
+              label="Precio"
+              type="number"
+            />
+            <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="tipo">Tipo</InputLabel>
+             <Select
+               value={values.tipo}
+                onChange={handleChange}
+                inputProps={{
+                 name: 'tipo',
+                 id: 'Tipo',
+                }}
+                >
+          <MenuItem value={10}>Bebida</MenuItem>
+          <MenuItem value={20}>Comida</MenuItem>
+          <MenuItem value={30}>Postre</MenuItem>
+        </Select>
+      </FormControl>
+        </DialogContent>       
+        <DialogActions>
+        <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleClose} color="primary">
+            Aceptar
+          </Button>        
+      </DialogActions>
+      </Dialog>
+      <Button>Eliminar</Button>
         <InputBase
         className={classes.input}
-        placeholder="Buscar..."
-        
-        inputProps={{ 'aria-label': 'search google ' ,}} //ponerle color
+        style={{height: 40, background:'white', borderWidth: 1, color : "black" }}
+        placeholder= "Buscar..."
+        inputProps={{ 'aria-label': 'search google ' ,}} 
       />
       </ButtonGroup>
     </Grid>
