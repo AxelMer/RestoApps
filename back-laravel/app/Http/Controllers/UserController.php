@@ -14,9 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user = User::all();
-         //response()->json([$user]);
-         return $user->toArray();
+        return User::all();
     }
 
 
@@ -29,7 +27,16 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        
+        Producto::insert([
+            'name' => $request->input('nombre'),
+            'email' => $request->input('email'),
+            'password' => $request->input('password')
+          ]);
+    
+          $response['message'] = "Guardo exitosamente";
+          $response['success'] = true;
+    
+          return $response;
     }
 
     /**
