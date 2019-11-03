@@ -9,7 +9,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: darkgray;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -24,7 +24,15 @@
 .App-link {
   color: #61dafb;
 }
-
+.table{
+  background-color: white;
+  max-width: 600vh;
+  font-size: 16px;
+}
+.table thead{
+  background-color: grey;
+  font-size: 21px;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -35,8 +43,7 @@
 }
 
 .Botonera{
-  padding-bottom: 10px; 
-    
+  padding-bottom: 10px;
   }
 
   .classes.button{
