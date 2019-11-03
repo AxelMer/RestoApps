@@ -27,10 +27,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        Producto::insert([
-            'name' => $request->input('nombre'),
-            'email' => $request->input('email'),
-            'password' => $request->input('password')
+
+      $rules = array(
+        'name' => 'required',
+        'user' => 'required',
+        'password' =>'requided',
+        'tipo' => 'required'
+    );
+    
+        User::create([
+            'name' => $request->input('name'),
+            'user' => $request->input('user'),
+            'password' => $request->input('password'),
+            'permiso' => $request->input('tipo')
           ]);
     
           $response['message'] = "Guardo exitosamente";
