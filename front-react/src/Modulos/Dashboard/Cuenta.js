@@ -26,11 +26,10 @@ export default class Cuentas extends  Component{
     /*this.handleChangeUser = this.handleChangeUser.bind(this);
     this.handleChangeEmail  = this.handleChangeEmail.bind(this);
     this.handleChangePassword  = this.handleChangePassword.bind(this);
-   */
+  */  this.handleClickOpen = this.handleClickOpen.bind(this);
   }
-/*
 //crear los handler 
-handleChangeUser(){
+/*handleChangeUser(){
   this.setState({user: event.target.value})
 }
 handleChangeEmail(){
@@ -38,11 +37,13 @@ handleChangeEmail(){
 }
 handleChangePassword(){
   this.setState({password: event.target.value})
-}
+}*/
 handleClickOpen (){
-  this.setState({Open: true})
+  this.setState({
+  open: true
+  })
 };
-*/
+
 //Metodo para editar usuario
   editUserExits(){
     //Editar un user existente
@@ -50,7 +51,7 @@ handleClickOpen (){
 //Metodo para Crear Nuevo Usuario
   createNewUser(){
     //Todo el codigo para subir datos
- 
+    axios.post('http://localhost:8000/User')
   }
 //Metodo para Eliminar usuario
   deleteUser(){
@@ -120,16 +121,37 @@ render() {
                     </tbody>
                 </Table>
               </div>
-            
-              <Button
+            <div>
+            <Button
                 size="small" 
                 variant="contained"
                 color="primary"
-               
-              >
+            >
               <AddIcon/>
                 Nueva cuenta
-              </Button>
+            </Button>
+            <Dialog
+              open={this.state.open}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+        <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Let Google help apps determine location. This means sending anonymous location data to
+            Google, even when no apps are running.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button  color="primary">
+            Disagree
+          </Button>
+          <Button color="primary" autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
+            </div>
     </div>
     </div>
   );

@@ -60,7 +60,21 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+     
+      // inserta los datos
+      User::where('id',$request->input('id'))->
+      update([
+        'titulo' => $request->input('nombre'),
+        'descripcion' => $request->input('descripcion'),
+        'precio' => $request->input('precio')
+      ]);
+
+      // respesta de JSON
+      $response['message'] = "Actualizo exitosamente";
+      $response['success'] = true;
+
+      return $response;
+
     }
 
     /**
