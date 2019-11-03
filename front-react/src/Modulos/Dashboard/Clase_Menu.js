@@ -16,19 +16,21 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 
-export default class Salon extends  React.Component{
+export default class Menu extends  React.Component{
   constructor(props){
     super(props);
     this.state = {
       idUser:0,
       lista:[],
-      capacidad:'',
-      estado:'',
+      articulo:'',
+      precio:'',
+      cantidad:'',
       open:false,
     }
     this.handleChangeUser = this.handleChangeUser.bind(this);
-    this.handleChangeCapacidad  = this.handleChangeCapacidad.bind(this);
-    this.handleChangeEstado  = this.handleChangeEstado.bind(this);
+    this.handleChangeArticulo  = this.handleChangeArticulo.bind(this);
+    this.handleChangePrecio  = this.handleChangePrecio.bind(this);
+    this.handleChangeCantidad = this.handleChangeCantidad.bind(this);
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
   }
@@ -36,11 +38,14 @@ export default class Salon extends  React.Component{
 handleChangeUser(event){
   this.setState({user: event.target.value})
 }
-handleChangeCapacidad(event){
-  this.setState({capacidad: event.target.value})
+handleChangeArticulo(event){
+  this.setState({articulo: event.target.value})
 }
-handleChangeEstado(event){
-  this.setState({estado: event.target.value})
+handleChangePrecio(event){
+  this.setState({precio: event.target.value})
+}
+handleChangeCantidad(event){
+  this.setState({cantidad:event.target.value})
 }
 
 
@@ -61,8 +66,9 @@ guardarDatos(e){
   e.preventDefault();
   const formData = {
     user: this.state.user,
-    capacidad: this.state.capacidad,
-    estado: this.state.estado,
+    articulo: this.state.articulo,
+    precio: this.state.precio,
+    cantidad: this.state.cantidad,
   }
   axios.post('http://localhost:8000/User/Store',formData).then( res=>console.log(res.data) 
 ).catch(error=>{
@@ -92,8 +98,9 @@ guardarDatos(e){
       <tr>
         <td>{data.id}</td>
         <td>{data.user}</td>
-        <td>{data.capacidad}</td>
-        <td>{data.estado}</td>
+        <td>{data.articulo}</td>        
+        <td>{data.precio}</td>
+        <td>{data.cantidad}</td>
         <td>
         <Button
         size="small" 
@@ -123,7 +130,7 @@ render() {
           <Appheader/>
             <div>
               <div> 
-                <h1>Administracion de Salon</h1>
+                <h1>Productos</h1>
               <hr/>
               </div>
               <div>
@@ -131,8 +138,9 @@ render() {
                     <thead>
                       <tr>
                         <th>Codigo</th>
-                        <th>Capacidad</th>
-                        <th>Estado</th>
+                        <th>Articulo</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
                         <th></th>
                         <th></th>
                       </tr>
@@ -150,7 +158,7 @@ render() {
             onClick={this.openModal}
         >
           <AddIcon/>
-            Agregar Nueva Mesa
+            Agregar
         </Button>
       <Dialog
         open={this.state.open}
@@ -158,33 +166,42 @@ render() {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">Crear Nuevo Usuario</DialogTitle>
+        <DialogTitle id="alert-dialog-title">Agregar Nuevo Producto</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
           <DialogContent>
                   <DialogContentText>
-                    Ingrese datos
+                    Ingrese los datos. 
                   </DialogContentText>
                   <TextField
                   autoFocus
                   margin="dense"
-                  id="cantidad"
-                  label="Sillas"
+                  id="articulo"
+                  label="Articulo"
+                  type="text"
+                  value={this.state.articulo}
+                  onChange={this.handleChangeArticulo}
+                  fullWidth
+                   />
+                  <TextField
+                  margin="dense"
+                  id="precio"
+                  label="Precio"
                   type="number"
-                  value={this.state.cantidad}
-                  onChange={this.handleChangeCantidad}
+                  value={this.state.precio}
+                  onChange={this.handleChangePrecio}
                   fullWidth
                    />
                   <Select
                     labelId="demo-simple-select-label"
                     id="tipo"
                     fullWidth
-                    value={this.state.estado}
-                    onChange={this.handleChangeEstado}
+                    value={this.state.tipo}
+                    onChange={this.handleChangeTipo}
                   >
-                    <MenuItem value={'libre'}>Libre</MenuItem>
-                    <MenuItem value={'ocupada'}>Ocupada</MenuItem>
-                    <MenuItem value={'reservada'}>Reservada</MenuItem>
+                    <MenuItem value={'admin'}>Bebida</MenuItem>
+                    <MenuItem value={'mozo'}>Comida</MenuItem>
+                    <MenuItem value={'cocina'}>Postre</MenuItem>
                   </Select>
                </DialogContent>
                <DialogActions>
