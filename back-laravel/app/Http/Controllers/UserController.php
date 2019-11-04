@@ -27,25 +27,16 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+      $user = new User([
+        'name' => $request->get('name'),
+        'user' => $request->get('user'),
+        'password' => $request->get('password'),
+        'tipo' => $request->get('tipo'),
+      ]);
+      $user->save();
 
-      $rules = array(
-        'name' => 'required',
-        'user' => 'required',
-        'password' =>'requided',
-        'tipo' => 'required'
-    );
-    
-        User::create([
-            'name' => $request->input('name'),
-            'user' => $request->input('user'),
-            'password' => $request->input('password'),
-            'permiso' => $request->input('tipo')
-          ]);
-    
-          $response['message'] = "Guardo exitosamente";
-          $response['success'] = true;
-    
-          return $response;
+
+      return response()->json('Product Added Successfully.');
     }
 
     /**
@@ -73,9 +64,10 @@ class UserController extends Controller
       // inserta los datos
       User::where('id',$request->input('id'))->
       update([
-        'titulo' => $request->input('nombre'),
-        'descripcion' => $request->input('descripcion'),
-        'precio' => $request->input('precio')
+        'name' => $request->input('name'),
+        'user' => $request->input('user'),
+        'password' => $request->input('password'),
+        'tipo' => $request->input('tipo')
       ]);
 
       // respesta de JSON
@@ -94,6 +86,6 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+
     }
 }

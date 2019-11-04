@@ -35,6 +35,10 @@ export default class Cuentas extends  React.Component{
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
   }
+
+componentDidMount(){
+    this.DataUser() 
+} 
 //Los cambios de los inputs
 handleChangeUser(event){
   this.setState({user: event.target.value})
@@ -48,8 +52,6 @@ handleChangePassword(event){
 handleChangeTipo(event){
   this.setState({tipo:event.target.value})
 }
-
-
 //Configuracion del estado del Modal
 openModal() {
   this.setState({ open: true });
@@ -58,42 +60,83 @@ closeModal() {
   this.setState({ open: false });
 }
 
-//Metodo para editar usuario
-  editUserExits(){
+//tomamos los datos de una fila y lo colocamos en el modal para ser editado
+editUserExits(data){
     //Editar un user existente
-  }
-//Metodo para Crear Nuevo Usuario
-guardarDatos(e){
-  e.preventDefault();
+    this.setState({
+      idUser: data.id,
+      name: data.name,
+      user: data.user,
+      password: data.password,
+      tipo: data.permiso,
+      open:true
+    })
+ }
+
+sendNetworkUpdate(){
+
   const formData = {
-    name: this.state.name,
-    user: this.state.user,
-    password: this.state,
-    tipo: this.state.tipo,
-  }
-  axios.post('http://localhost:8000/User/Store',formData).then( res=>console.log(res.data) 
-).catch(error=>{
+  id: this.state.idUser,
+  name: this.state.name,
+  user:this.state.user,
+  password: this.state.password,
+  tipo: this.state.tipo,
+}
+
+  axios.put('http://localhost:8000/User/',formData).then(response=>{
+
+       if (response.data.success==true) {
+         alert(response.data.message)
+         // para cargar datos de nuevo
+         this.DataUser()
+         // para cerrar el modal
+       }
+
+   }).catch(error=>{
      alert("Error 456"+error)
    })
 
 }
 
+//Metodo para Crear Nuevo Usuario
+// No funciona arreglar 
+guardarDatos(e){
+  e.preventDefault();
+  
+  const name = this.state.name
+  const user = this.state.user
+  const pass = this.state.password
+  const tipo = this.state.tipo
+ const users= {
+  name: name,
+  user: user,
+  password: pass,
+  tipo: tipo,
+}
+  axios.post('http://localhost:8000/User' , { users })
+    .then(res => {
+      console.log(res);
+      console.log(res.data);
+    })
+}
+//Llamamos a la Api para traer los datos
+DataUser(){
+  axios.get('http://localhost:8000/User')
+  .then(response=>{
+    this.setState({lista:response.data})
+  }).catch(error=>{
+    alert("Error "+error)
+  })
+}
 //Metodo para Eliminar usuario
   deleteUser(){
    //Todo el codigo para eliminar un user de la tabla 
+   
   }
 
-  componentDidMount(){
-
-    axios.get('http://localhost:8000/User')
-    .then(response=>{
-      this.setState({lista:response.data})
-    }).catch(error=>{
-      alert("Error "+error)
-    })
- }
  //Organiza la lista del json que traemos de la API
   renderList(){
+
     return this.state.lista.map((data)=>{
         return(
       <tr>
@@ -107,6 +150,7 @@ guardarDatos(e){
         size="small" 
         variant="contained"
         color="primary"
+        onClick={()=>this.editUserExits(data)}
       >
       <EditRoundedIcon/>Edit
       </Button>
@@ -141,7 +185,8 @@ render() {
                         <th>Codigo</th>
                         <th>Nombre</th>
                         <th>Usuario</th>
-                        <th>Tipo</th>
+                        <th>Contraseña</th>
+                        <th>Permiso</th>
                         <th>Opciones</th>
                       </tr>
                     </thead>
@@ -174,32 +219,32 @@ render() {
                     Ingrese los datos del personal autorizado.
                   </DialogContentText>
                   <TextField
-                  autoFocus
-                  margin="dense"
-                  id="name"
-                  label="Nombre"
-                  type="text"
-                  value={this.state.name}
-                  onChange={this.handleChangeName}
-                  fullWidth
+                    autoFocus
+                    margin="dense"
+                    id="name"
+                    label="Nombre"
+                    type="text"
+                    value={this.state.name}
+                    onChange={this.handleChangeName}
+                    fullWidth
                    />
                   <TextField
-                  margin="dense"
-                  id="user"
-                  label="Usuario"
-                  type="text"
-                  value={this.state.user}
-                  onChange={this.handleChangeUser}
-                  fullWidth
+                    margin="dense"
+                    id="user"
+                    label="Usuario"
+                    type="text"
+                    value={this.state.user}
+                    onChange={this.handleChangeUser}
+                    fullWidth
                    />
                   <TextField
-                  margin="dense"
-                  id="password"
-                  label="Contraseña"
-                  type="password"
-                  value={this.state.password}
-                  onChange={this.handleChangePassword}
-                  fullWidth
+                    margin="dense"
+                    id="password"
+                    label="Contraseña"
+                    type="password"
+                    value={this.state.password}
+                    onChange={this.handleChangePassword}
+                    fullWidth
                    />
                   <Select
                     labelId="demo-simple-select-label"
@@ -217,8 +262,8 @@ render() {
                <Button onClick={this.closeModal} color="primary">
             Cancel
           </Button>
-          <Button onClick={this.guardarDatos} color="primary">
-            Aceptar
+          <Button onClick={this.sendNetworkUpdate} color="primary">
+            Guardar
           </Button>
         </DialogActions>
           </DialogContentText>

@@ -19,10 +19,8 @@ export default class Login extends Component{
     const data = { cuenta: this.state.cuenta, password: this.state.password };
 
     axios
-      .post("http://localhost:8000/api/auth/login", data)
+      .post("http://localhost:8000/User", data)
       .then(res => {
-        cookie.set("token", res.data.access_token);
-        this.props.setLogin(res.data.user);
         this.props.history.push("/home");
       })
       .catch(e => this.setState({ errors: e.response.data.errors }));
