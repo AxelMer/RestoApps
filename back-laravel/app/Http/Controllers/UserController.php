@@ -14,6 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
+        \Session::flush();
         return User::all();
     }
 
@@ -27,16 +28,25 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-      $user = new User([
-        'name' => $request->get('name'),
-        'user' => $request->get('user'),
-        'password' => $request->get('password'),
-        'tipo' => $request->get('tipo'),
-      ]);
-      $user->save();
 
-
-      return response()->json('Product Added Successfully.');
+     /*  $rules = array(
+          'name' => 'required',
+          'user' => 'required',
+          'password' =>'requided',
+          'tipo' => 'required'
+      ); */
+    
+        User::create([
+            'name' => $request->input('name'),
+            'user' => $request->input('user'),
+            'password' => $request->input('password'),
+            'tipo' => $request->input('tipo')
+          ]);
+    
+          $response['message'] = "Guardo exitosamente";
+          $response['success'] = true;
+    
+          return $response;
     }
 
     /**
@@ -68,7 +78,7 @@ class UserController extends Controller
         'user' => $request->input('user'),
         'password' => $request->input('password'),
         'tipo' => $request->input('tipo')
-      ]);
+     ]);
 
       // respesta de JSON
       $response['message'] = "Actualizo exitosamente";
@@ -86,6 +96,6 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-
+        //
     }
 }

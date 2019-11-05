@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
 import Home from './Modulos/Dashboard/home';
 
-import Cuenta from './Modulos/Dashboard/Cuenta';
+import Cuenta from './Modulos/Dashboard/Clase_Cuenta';
 import Salon from './Modulos/Dashboard/Clase_Salon';
 import Menu from './Modulos/Dashboard/Clase_Menu';
 import Login from './Modulos/Login/index';

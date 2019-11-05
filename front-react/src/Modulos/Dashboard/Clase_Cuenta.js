@@ -20,7 +20,7 @@ export default class Cuentas extends  React.Component{
   constructor(props){
     super(props);
     this.state = {
-      idUser:0,
+      idUser:1,
       lista:[],
       name:'',
       user:'',
@@ -35,56 +35,93 @@ export default class Cuentas extends  React.Component{
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
   }
-//Los cambios de los inputs
-handleChangeUser(event){
-  this.setState({user: event.target.value})
-}
-handleChangeName(event){
-  this.setState({name: event.target.value})
-}
-handleChangePassword(event){
-  this.setState({password: event.target.value})
-}
-handleChangeTipo(event){
-  this.setState({tipo:event.target.value})
-}
+  //Los cambios de los inputs
+  handleChangeUser(event){
+    this.setState({user: event.target.value})
+  }
+  handleChangeName(event){
+    this.setState({name: event.target.value})
+  }
+  handleChangePassword(event){
+    this.setState({password: event.target.value})
+  }
+  handleChangeTipo(event){
+    this.setState({tipo:event.target.value})
+  }
 
 
 //Configuracion del estado del Modal
-openModal() {
-  this.setState({ open: true });
-}
-closeModal() {
-  this.setState({ open: false });
-}
+  openModal() {
+    this.setState({ open: true });
+  }
+  closeModal() {
+    this.setState({ open: false });
+  }
 
 //Metodo para editar usuario
-  editUserExits(){
+  editUserExits=(e)=>{
     //Editar un user existente
+    e.preventDefault();
+    const formData = {idUser: this.state.idUser};
+
+    axios.put(`http://localhost:8000/User/${formData}`,{withCredentials:true})
+      .then( res=> {
+        console.log(res);
+        console.log(res.data);
+      })
+      .catch(error=>{
+        console.log(error);
+        console.log(error.data);
+        console.log(formData)
+      alert("Error 456"+error)
+      })
+    
   }
 //Metodo para Crear Nuevo Usuario
-guardarDatos(e){
-  e.preventDefault();
-  const formData = {
-    name: this.state.name,
-    user: this.state.user,
-    password: this.state,
-    tipo: this.state.tipo,
-  }
-  axios.post('http://localhost:8000/User/Store',formData).then( res=>console.log(res.data) 
-).catch(error=>{
-     alert("Error 456"+error)
-   })
+  guardarDatos=(e)=>{
+    e.preventDefault();
+    const formData = {
+      name: this.state.name,
+      user: this.state.user,
+      password: this.state.password,
+      tipo: this.state.tipo,
+    };
 
-}
+
+    const url = 'http://localhost:8000/User/';
+
+    axios.post(url,{formData, withCredentials:true})
+      .then( res=> {
+        console.log(res);
+        console.log(res.data);
+      })
+      .catch(error=>{
+        console.log(error);
+        console.log(error.res);
+      alert("Error 456"+error)
+      })
+  }
 
 //Metodo para Eliminar usuario
-  deleteUser(){
-   //Todo el codigo para eliminar un user de la tabla 
+  deleteUser=(e)=>{
+    //Todo el codigo para eliminar un user de la tabla 
+    e.preventDefault();
+    const formData = {idUser: this.state.idUser};
+
+    axios.delete(`http://localhost:8000/User/${formData}`)
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+      })
+      .catch(error=>{
+        console.log(error);
+        console.log(error.data);
+        alert("Error 456"+error)
+      })
   }
 
-  componentDidMount(){
 
+  componentDidMount(){
     axios.get('http://localhost:8000/User')
     .then(response=>{
       this.setState({lista:response.data})
@@ -92,6 +129,7 @@ guardarDatos(e){
       alert("Error "+error)
     })
  }
+
  //Organiza la lista del json que traemos de la API
   renderList(){
     return this.state.lista.map((data)=>{
@@ -104,10 +142,12 @@ guardarDatos(e){
         <td>{data.permiso}</td>
         <td>
         <Button
-        size="small" 
-        variant="contained"
-        color="primary"
-      >
+          size="small" 
+          variant="contained"
+          color="primary"
+          value={this.state.idUser}
+          onClick={this.editUserExits}
+        >
       <EditRoundedIcon/>Edit
       </Button>
         <Button
@@ -161,7 +201,9 @@ render() {
           <AddIcon/>
             Nueva cuenta
         </Button>
-      <Dialog
+
+        <form >
+        <Dialog
         open={this.state.open}
         onClose={this.closeModal}
         aria-labelledby="alert-dialog-title"
@@ -228,6 +270,7 @@ render() {
          
         </DialogActions>
       </Dialog>
+      </form>
     </div>
       </div>
     </div>
