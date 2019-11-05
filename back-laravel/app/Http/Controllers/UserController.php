@@ -14,10 +14,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        \Session::flush();
-        return User::all();
+      \Session::flush();
+      return User::all();
     }
-
+  
 
 
     /**
@@ -94,8 +94,17 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(User $user, $id)
     {
-        //
+      $user = User::find($id);
+
+      $user->delete();
+
+      return Response::json(array(
+          'error' => false,
+          'message' => 'Page Deleted'),
+          200
+      );
     }
 }
+?>

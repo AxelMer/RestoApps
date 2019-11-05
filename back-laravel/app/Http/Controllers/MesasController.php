@@ -14,7 +14,8 @@ class MesasController extends Controller
      */
     public function index()
     {
-        //
+        \Session::flush();
+        return Mesas::all();
     }
 
     /**
@@ -25,7 +26,15 @@ class MesasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        User::create([
+            'capacidad' => $request->input('name'),
+            'estado' => $request->input('user'),
+          ]);
+    
+          $response['message'] = "Guardo exitosamente";
+          $response['success'] = true;
+    
+          return $response;
     }
 
     /**
@@ -62,3 +71,4 @@ class MesasController extends Controller
         //
     }
 }
+?>

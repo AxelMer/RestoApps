@@ -20,7 +20,7 @@ export default class Cuentas extends  React.Component{
   constructor(props){
     super(props);
     this.state = {
-      idUser:1,
+      idUser:'',
       lista:[],
       name:'',
       user:'',
@@ -35,7 +35,7 @@ export default class Cuentas extends  React.Component{
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
   }
-  //Los cambios de los inputs
+  //
   handleChangeUser(event){
     this.setState({user: event.target.value})
   }
@@ -48,9 +48,6 @@ export default class Cuentas extends  React.Component{
   handleChangeTipo(event){
     this.setState({tipo:event.target.value})
   }
-
-
-//Configuracion del estado del Modal
   openModal() {
     this.setState({ open: true });
   }
@@ -58,52 +55,83 @@ export default class Cuentas extends  React.Component{
     this.setState({ open: false });
   }
 
-//Metodo para editar usuario
-  editUserExits=(e)=>{
-    //Editar un user existente
-    e.preventDefault();
-    const formData = {idUser: this.state.idUser};
+//Metodo para cargar despues que un componente se invoque
+componentDidMount(){
+  //Hacemos un GET a la Api de laravel y lo devolvemos
+  axios.get('http://localhost:8000/User')
+  .then(response=>{
+    this.setState({lista:response.data})
+  }).catch(error=>{
+    alert("Error "+error)
+  })
+}
 
-    axios.put(`http://localhost:8000/User/${formData}`,{withCredentials:true})
-      .then( res=> {
-        console.log(res);
-        console.log(res.data);
-      })
-      .catch(error=>{
-        console.log(error);
-        console.log(error.data);
-        console.log(formData)
-      alert("Error 456"+error)
-      })
-    
-  }
-//Metodo para Crear Nuevo Usuario
-  guardarDatos=(e)=>{
-    e.preventDefault();
-    const formData = {
-      name: this.state.name,
-      user: this.state.user,
-      password: this.state.password,
-      tipo: this.state.tipo,
-    };
+///Metodos para Agregar nuevo Usuario
+addNewUser=(e)=>{
+  e.preventDefault();
+  //tomamos los datos de los State
+  const formData = {
+    name: this.state.name,
+    user: this.state.user,
+    password: this.state.password,
+    tipo: this.state.tipo,
+  };
+  //Hacemos un POST a la Api para crear un nuevo usuario
 
+  const url = 'http://localhost:8000/User/';
 
-    const url = 'http://localhost:8000/User/';
+  axios.post(url,{formData, withCredentials:true})
+    .then( res=> {
+      console.log(res);
+      console.log(res.data);
+    })
+    .catch(error=>{
+      console.log(error);
+      console.log(error.res);
+    alert("Error 456"+error)
+    })  
+}
 
-    axios.post(url,{formData, withCredentials:true})
-      .then( res=> {
-        console.log(res);
-        console.log(res.data);
-      })
-      .catch(error=>{
-        console.log(error);
-        console.log(error.res);
-      alert("Error 456"+error)
-      })
-  }
+//Metodo Para Editar usuario existente
+editUser=(data)=>{
+    this.setState({
+      idUser: data.id,
+      name: data.name,
+      user: data.user,
+      password: data.password,
+      tipo: data.permiso,
+      open:true
+    })
+}
+
+//Enviamos los datos por medio del PUT
+sendUpdate=(e)=>{
+
+const formData = {
+id: this.state.idUser,
+name: this.state.name,
+user:this.state.user,
+password: this.state.password,
+tipo: this.state.tipo,
+}
+const idU = this.state.idUser 
+axios.put('http://localhost:8000/User/', idU, formData).then(response=>{
+
+     if (response.data.success==true) {
+       alert(response.data.message)
+       // para cargar datos de nuevo
+       this.DataUser()
+       // para cerrar el modal
+     }
+
+ }).catch(error=>{
+   alert("Error 456"+error)
+ })
+
+}
 
 //Metodo para Eliminar usuario
-  deleteUser=(e)=>{
+deleteUser=(e)=>{
     //Todo el codigo para eliminar un user de la tabla 
     e.preventDefault();
     const formData = {idUser: this.state.idUser};
@@ -118,17 +146,7 @@ export default class Cuentas extends  React.Component{
         console.log(error.data);
         alert("Error 456"+error)
       })
-  }
-
-
-  componentDidMount(){
-    axios.get('http://localhost:8000/User')
-    .then(response=>{
-      this.setState({lista:response.data})
-    }).catch(error=>{
-      alert("Error "+error)
-    })
- }
+}
 
  //Organiza la lista del json que traemos de la API
   renderList(){
@@ -145,8 +163,7 @@ export default class Cuentas extends  React.Component{
           size="small" 
           variant="contained"
           color="primary"
-          value={this.state.idUser}
-          onClick={this.editUserExits}
+          onClick={()=>this.editUser(data)}
         >
       <EditRoundedIcon/>Edit
       </Button>
@@ -154,6 +171,8 @@ export default class Cuentas extends  React.Component{
         size="small" 
         variant="contained"
         color="secondary"
+        value={this.state.idUser}
+        onClick={this.deleteUser}
       >
       <DeleteIcon/>
         Delete
@@ -257,13 +276,19 @@ render() {
                   </Select>
                </DialogContent>
                <DialogActions>
-               <Button onClick={this.closeModal} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={this.guardarDatos} color="primary">
-            Aceptar
-          </Button>
-        </DialogActions>
+                  <Button onClick={this.closeModal} color="primary">
+                    Cancel
+                  </Button>
+                 {this.state.open ?
+                  <Button onClick={this.sendUpdate} color="primary">
+                  Actualizar
+                </Button>
+                :
+                <Button onClick={this.addNewUser} color="primary">
+                Guardar
+              </Button>
+                }
+                </DialogActions>
           </DialogContentText>
         </DialogContent>
         <DialogActions>

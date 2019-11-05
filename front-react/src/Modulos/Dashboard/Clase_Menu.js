@@ -97,7 +97,6 @@ guardarDatos(e){
         return(
       <tr>
         <td>{data.id}</td>
-        <td>{data.user}</td>
         <td>{data.articulo}</td>        
         <td>{data.precio}</td>
         <td>{data.cantidad}</td>
@@ -141,8 +140,7 @@ render() {
                         <th>Articulo</th>
                         <th>Precio</th>
                         <th>Cantidad</th>
-                        <th></th>
-                        <th></th>
+                        <th>Opciones</th>
                       </tr>
                     </thead>
                     <tbody>

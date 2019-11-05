@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from "axios";
-import cookie from "js-cookie";
 import Error from "./componente/error";
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -21,7 +20,7 @@ export default class Login extends Component{
     axios
       .post("http://localhost:8000/api/auth/login", data)
       .then(res => {
-        cookie.set("token", res.data.access_token);
+
         this.props.setLogin(res.data.user);
         this.props.history.push("/home");
       })

@@ -60,25 +60,44 @@ closeModal() {
 guardarDatos(e){
   e.preventDefault();
   const formData = {
-    user: this.state.user,
     capacidad: this.state.capacidad,
     estado: this.state.estado,
   }
-  axios.post('http://localhost:8000/User/Store',formData).then( res=>console.log(res.data) 
-).catch(error=>{
-     alert("Error 456"+error)
-   })
+  const url = 'http://localhost:8000/Mesas/';
 
+  axios.post(url,{formData, withCredentials:true})
+    .then( res=> {
+      console.log(res);
+      console.log(res.data);
+    })
+    .catch(error=>{
+      console.log(error);
+      console.log(error.res);
+    alert("Error 456"+error)
+    })
 }
 
 //Metodo para Eliminar usuario
-  deleteUser(){
-   //Todo el codigo para eliminar un user de la tabla 
-  }
+deleteUser=(e)=>{
+  //Todo el codigo para eliminar un user de la tabla 
+  e.preventDefault();
+  const formData = {idUser: this.state.idUser};
+
+  axios.delete(`http://localhost:8000/Mesas/${formData}`)
+    .then(res => {
+      console.log(res);
+      console.log(res.data);
+    })
+    .catch(error=>{
+      console.log(error);
+      console.log(error.data);
+      alert("Error 456"+error)
+    })
+}
 
   componentDidMount(){
 
-    axios.get('http://localhost:8000/User')
+    axios.get('http://localhost:8000/Mesas')
     .then(response=>{
       this.setState({lista:response.data})
     }).catch(error=>{
@@ -91,7 +110,6 @@ guardarDatos(e){
         return(
       <tr>
         <td>{data.id}</td>
-        <td>{data.user}</td>
         <td>{data.capacidad}</td>
         <td>{data.estado}</td>
         <td>
