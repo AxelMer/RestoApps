@@ -14,9 +14,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+      \Session::flush();
+      return User::all();
     }
-
+  
 
 
     /**
@@ -27,7 +28,25 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+     /*  $rules = array(
+          'name' => 'required',
+          'user' => 'required',
+          'password' =>'requided',
+          'tipo' => 'required'
+      ); */
+    
+        User::create([
+            'name' => $request->input('name'),
+            'user' => $request->input('user'),
+            'password' => $request->input('password'),
+            'tipo' => $request->input('tipo')
+          ]);
+    
+          $response['message'] = "Guardo exitosamente";
+          $response['success'] = true;
+    
+          return $response;
     }
 
     /**
@@ -36,9 +55,10 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show($id)
     {
-        //
+        $edit = User::find($id);
+        return $edit->toArray();
     }
 
     /**
@@ -50,7 +70,22 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+     
+      // inserta los datos
+      User::where('id',$request->input('id'))->
+      update([
+        'name' => $request->input('name'),
+        'user' => $request->input('user'),
+        'password' => $request->input('password'),
+        'tipo' => $request->input('tipo')
+     ]);
+
+      // respesta de JSON
+      $response['message'] = "Actualizo exitosamente";
+      $response['success'] = true;
+
+      return $response;
+
     }
 
     /**
@@ -59,8 +94,17 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(User $user, $id)
     {
-        //
+      $user = User::find($id);
+
+      $user->delete();
+
+      return Response::json(array(
+          'error' => false,
+          'message' => 'Page Deleted'),
+          200
+      );
     }
 }
+?>

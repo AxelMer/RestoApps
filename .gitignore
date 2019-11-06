@@ -3,7 +3,6 @@
 /back-laravel/public/storage
 /back-laravel/storage/*.key
 /back-laravel/vendor
-/back-laravel.env
 /back-laravel.env.backup
 /back-laravel.phpunit.result.cache
 /back-laravelHomestead.json

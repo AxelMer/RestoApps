@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\mesas;
+use App\pedidos_mesas;
 use Illuminate\Http\Request;
 
-class MesasController extends Controller
+class PedidosMesasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,17 @@ class MesasController extends Controller
      */
     public function index()
     {
-        \Session::flush();
-        return Mesas::all();
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
     }
 
     /**
@@ -26,24 +35,27 @@ class MesasController extends Controller
      */
     public function store(Request $request)
     {
-        User::create([
-            'capacidad' => $request->input('name'),
-            'estado' => $request->input('user'),
-          ]);
-    
-          $response['message'] = "Guardo exitosamente";
-          $response['success'] = true;
-    
-          return $response;
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\mesas  $mesas
+     * @param  \App\pedidos_mesas  $pedidos_mesas
      * @return \Illuminate\Http\Response
      */
-    public function show(mesas $mesas)
+    public function show(pedidos_mesas $pedidos_mesas)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\pedidos_mesas  $pedidos_mesas
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(pedidos_mesas $pedidos_mesas)
     {
         //
     }
@@ -52,10 +64,10 @@ class MesasController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\mesas  $mesas
+     * @param  \App\pedidos_mesas  $pedidos_mesas
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, mesas $mesas)
+    public function update(Request $request, pedidos_mesas $pedidos_mesas)
     {
         //
     }
@@ -63,12 +75,11 @@ class MesasController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\mesas  $mesas
+     * @param  \App\pedidos_mesas  $pedidos_mesas
      * @return \Illuminate\Http\Response
      */
-    public function destroy(mesas $mesas)
+    public function destroy(pedidos_mesas $pedidos_mesas)
     {
         //
     }
 }
-?>

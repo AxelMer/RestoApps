@@ -9,18 +9,29 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: darkgray;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: left;
+  justify-content: left;
   font-size: calc(10px + 2vmin);
   color: white;
+  padding-left: 300px;
+  padding-right: 100px;
 }
 
 .App-link {
   color: #61dafb;
+}
+.table{
+  background-color: white;
+  max-width: 600vh;
+  font-size: 16px;
+}
+.table thead{
+  background-color: grey;
+  font-size: 21px;
 }
 
 @keyframes App-logo-spin {
@@ -31,3 +42,56 @@
     transform: rotate(360deg);
   }
 }
+.modal {
+  font-size: 21px;
+}
+.modal > .header {
+  width: 100%;
+  border-bottom: 1px solid gray;
+  font-size: 18px;
+  text-align: center;
+  padding: 5px;
+}
+.modal > .content {
+  width: 100%;
+  padding: 10px 5px;
+}
+.modal > .actions {
+  width: 100%;
+  padding: 10px 5px;
+  margin: auto;
+  text-align: center;
+}
+.modal > .close {
+  cursor: pointer;
+  position: absolute;
+  display: block;
+  padding: 2px 5px;
+  line-height: 20px;
+  right: -10px;
+  top: -10px;
+  font-size: 24px;
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #cfcece;
+}
+.Botonera{
+  padding-bottom: 10px;
+  }
+
+  .classes.button{
+    height:30px;
+    margin-bottom:50px;
+    padding-right: 50px;
+    padding-left: 250px;  
+    border-bottom:#CCC dotted 2px;
+    width:900px;
+    float:left;
+  }
+
+  .carousel{
+    padding-left: 300px;
+    padding-right: 20px;
+       
+
+  }
