@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -13,17 +13,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
-    }
+        
+        return User::all();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -34,7 +26,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        User::create([
+            'nombre' => $request->input('nombre'),
+            'usuario' => $request->input('usuario'),
+            'password' => $request->input('password'),
+            'credencial' => $request->input('credencial')
+          ]);
+    
+          $response['message'] = "Guardo exitosamente";
+          $response['success'] = true;
+    
+          return $response;
     }
 
     /**
@@ -45,18 +47,8 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        $edit = User::find($id);
+        return $edit->toArray();
     }
 
     /**
@@ -68,7 +60,13 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $input = $request->all();
+      $user = User::findorfail($id);
+      $updateNow = $user->update($input);
+      $response['message'] = "Se han actualizado los datos";
+      $response['success'] = true;
+
+      return $response;
     }
 
     /**
@@ -79,6 +77,13 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+       // Eliminar
+       User::destroy($id);
+      // respesta de JSON
+      $response['message'] = "Elimino exitosamente";
+      $response['success'] = true;
+
+      return $response;
     }
-}
+    }
+?>
