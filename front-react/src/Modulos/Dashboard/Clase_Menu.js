@@ -15,103 +15,194 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-
+import InputAdornment from '@material-ui/core/InputAdornment';
+ 
 export default class Menu extends  React.Component{
   constructor(props){
     super(props);
     this.state = {
-      idUser:0,
       lista:[],
+      idProducto:'',
       articulo:'',
+      categoria:'',
       precio:'',
-      cantidad:'',
+      cantidad: '',
       open:false,
+      edit:false
     }
-    this.handleChangeUser = this.handleChangeUser.bind(this);
-    this.handleChangeArticulo  = this.handleChangeArticulo.bind(this);
-    this.handleChangePrecio  = this.handleChangePrecio.bind(this);
-    this.handleChangeCantidad = this.handleChangeCantidad.bind(this);
+    this.handleChangeId = this.handleChangeId.bind(this);
+    this.cambiarArticulo = this.cambiarArticulo.bind(this);
+    this.cambiarCantidad = this.cambiarCantidad.bind(this);
+    this.cambiarCategoria  = this.cambiarCategoria.bind(this);
+    this.cambiarPrecio = this.cambiarPrecio.bind(this);
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.changeEdit = this.changeEdit.bind(this);
   }
-//Los cambios de los inputs
-handleChangeUser(event){
-  this.setState({user: event.target.value})
-}
-handleChangeArticulo(event){
-  this.setState({articulo: event.target.value})
-}
-handleChangePrecio(event){
-  this.setState({precio: event.target.value})
-}
-handleChangeCantidad(event){
-  this.setState({cantidad:event.target.value})
-}
-
-
-//Configuracion del estado del Modal
-openModal() {
-  this.setState({ open: true });
-}
-closeModal() {
-  this.setState({ open: false });
-}
-
-//Metodo para editar usuario
-  editUserExits(){
-    //Editar un user existente
-  }
-//Metodo para Crear Nuevo Usuario
-guardarDatos(e){
-  e.preventDefault();
-  const formData = {
-    user: this.state.user,
-    articulo: this.state.articulo,
-    precio: this.state.precio,
-    cantidad: this.state.cantidad,
-  }
-  axios.post('http://localhost:8000/User/Store',formData).then( res=>console.log(res.data) 
-).catch(error=>{
-     alert("Error 456"+error)
-   })
-
-}
-
-//Metodo para Eliminar usuario
-  deleteUser(){
-   //Todo el codigo para eliminar un user de la tabla 
-  }
-
-  componentDidMount(){
-
-    axios.get('http://localhost:8000/User')
-    .then(response=>{
-      this.setState({lista:response.data})
+    componentDidMount(){
+      this.loadData()
+    }
+    //
+    cambiarArticulo(event){
+      this.setState({articulo: event.target.value})
+    }
+    cambiarCategoria(event){
+      this.setState({categoria: event.target.value})
+    }
+    cambiarPrecio(event){
+      this.setState({precio: event.target.value})
+    }
+    cambiarCantidad(event){
+      this.setState({cantidad:event.target.value})
+    }
+    handleChangeId(event){
+      this.setState({idProducto:event.target.value})
+    }
+    openModal() {
+      this.setState({ open: true });
+    }
+    closeModal() {
+      this.setState({ 
+        open: false,
+        edit:false,
+        idProducto:'',
+        articulo:'',
+        categoria:'',
+        precio:'',
+        cantidad: '',
+      });
+    }
+    changeEdit() {
+      this.setState({ edit: true });
+    }
+  
+  //Metodo para traer la los datos
+    loadData = (e) =>{
+      axios.get('http://localhost:8000/Producto')
+      .then(response=>{
+        this.setState({lista:response.data})
+      }).catch(error=>{
+        alert("No se puede conectar con el servidor" + error)
+      })
+    }
+  ///Metodos para Agregar nuevo Usuario  ****FUNCIONANDO****
+    addProduct=(e)=>{
+      e.preventDefault();
+        const baseUrl = 'http://localhost:8000/';
+  
+        const formData = new FormData()
+          formData.append('articulo',this.state.articulo)
+          formData.append('categoria',this.state.categoria)
+          formData.append('precio',this.state.precio)
+          formData.append('cantidad',this.state.cantidad)
+  
+          axios.post(baseUrl+'/Producto',formData).then(response=>{
+              if (response.data.success === true) {
+                alert(response.data.message)
+                // cargar datos de nuevo
+                this.loadData();
+                this.setState({
+                  open: false
+                })
+              }
+  
+          }).catch(error=>{
+            alert("Error "+error)
+          })
+  
+    }
+  
+  //Metodos Para Editar usuario existente ****FUNCIONANDO****
+    editProduct=(data)=>{
+        this.setState({
+          idProducto: data.id,
+          articulo: data.articulo,
+          categoria: data.categoria,
+          precio: data.precio,
+          cantidad: data.cantidad,
+          open:true,
+          edit:true
+        })
+    }
+    sendUpdate=(e)=>{
+    const formData = {
+      id: this.state.idProducto,
+      articulo: this.state.articulo,
+      categoria: this.state.categoria,
+      cantidad: this.state.cantidad,
+      precio: this.state.precio,
+    }
+    const baseUrl = 'http://localhost:8000/';
+    const idU = this.state.idProducto;
+    console.log(idU)
+    axios.put(baseUrl+'/Producto/'+idU,formData).then(response=>{
+  
+      if (response.data.success===true) {
+        alert(response.data.message)
+        // para cargar datos de nuevo
+        this.loadData();
+        this.setState({
+          open: false
+        })
+      }
+  
     }).catch(error=>{
-      alert("Error "+error)
+      alert("Error 456"+error)
     })
- }
- //Organiza la lista del json que traemos de la API
+  
+    }
+  
+  //Metodos para Eliminar usuario **FUNCIONA CON PROBLEMAS** // Tenes que clickear dos veces
+  productDelete(data){ 
+    // id seleccionado para eliminar
+    this.setState({ idProducto:data.id })
+    //console.log(this.state.idUser);
+    //
+    if(this.state.idProducto){
+      this.sendDelete()
+    }else{
+      alert("No se puede borrar");
+    }
+  
+  }
+  sendDelete(){
+    const baseUrl = 'http://localhost:8000/';
+      //Todo el codigo para eliminar un user de la tabla 
+   //console.log(this.state.idUser)
+      axios.delete(baseUrl+'/Producto/'+this.state.idProducto)
+        .then(res => {
+          this.loadData();
+        })
+        .catch(error=>{
+          console.log(error);
+          console.log(error.data);
+          alert("Error 456"+error)
+        })
+  }
   renderList(){
     return this.state.lista.map((data)=>{
         return(
-      <tr>
+      <tr key={data.id}> 
         <td>{data.id}</td>
-        <td>{data.articulo}</td>        
-        <td>{data.precio}</td>
+        <td>{data.articulo}</td>
+        <td>{data.categoria}</td>
         <td>{data.cantidad}</td>
+        <td>${data.precio}</td>
         <td>
         <Button
-        size="small" 
-        variant="contained"
-        color="primary"
-      >
+          size="small" 
+          variant="contained"
+          color="primary"
+          value={data.id}
+          onClick={()=>this.editProduct(data)}
+        >
       <EditRoundedIcon/>Edit
       </Button>
         <Button
         size="small" 
         variant="contained"
         color="secondary"
+        onClick={()=>this.productDelete(data)}
       >
       <DeleteIcon/>
         Delete
@@ -120,105 +211,191 @@ guardarDatos(e){
       </tr>
     )
   })
-  }
+}
  
 render() {
-  
   return (
       <div>
           <Appheader/>
             <div>
               <div> 
-                <h1>Productos</h1>
+                <h1>Administrador de Menu</h1>
               <hr/>
               </div>
               <div>
-                  <Table className="table" size="sm">
+                  <Table className="table" size="small" aria-label="a dense table" >
                     <thead>
                       <tr>
                         <th>Codigo</th>
                         <th>Articulo</th>
-                        <th>Precio</th>
+                        <th>Categoria</th>
                         <th>Cantidad</th>
+                        <th>Precio</th>
                         <th>Opciones</th>
                       </tr>
                     </thead>
                     <tbody>
                       {this.renderList()}
                     </tbody>
-                </Table>
+                  </Table>
               </div>
               <div>
-        <Button
-            size="small" 
-            variant="contained"
-            color="primary"
-            onClick={this.openModal}
-        >
-          <AddIcon/>
-            Agregar
-        </Button>
-      <Dialog
-        open={this.state.open}
-        onClose={this.closeModal}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">Agregar Nuevo Producto</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-          <DialogContent>
-                  <DialogContentText>
-                    Ingrese los datos. 
+              <Button
+                  size="small" 
+                  variant="contained"
+                  color="primary"
+                  onClick={this.openModal}
+              >
+                <AddIcon/>
+                  Nueva cuenta
+              </Button>
+              <form>
+          <Dialog open={this.state.open} onClose={this.closeModal}  disableBackdropClick aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+            {this.state.edit ?  
+              <DialogContent>
+                <DialogTitle id="alert-dialog-title">Modificar datos</DialogTitle>
+                  <DialogContentText id="alert-dialog-description">
+                      Actualizar datos.
                   </DialogContentText>
-                  <TextField
-                  autoFocus
-                  margin="dense"
-                  id="articulo"
-                  label="Articulo"
-                  type="text"
-                  value={this.state.articulo}
-                  onChange={this.handleChangeArticulo}
-                  fullWidth
-                   />
-                  <TextField
-                  margin="dense"
-                  id="precio"
-                  label="Precio"
-                  type="number"
-                  value={this.state.precio}
-                  onChange={this.handleChangePrecio}
-                  fullWidth
-                   />
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="tipo"
-                    fullWidth
-                    value={this.state.tipo}
-                    onChange={this.handleChangeTipo}
-                  >
-                    <MenuItem value={'admin'}>Bebida</MenuItem>
-                    <MenuItem value={'mozo'}>Comida</MenuItem>
-                    <MenuItem value={'cocina'}>Postre</MenuItem>
-                  </Select>
-               </DialogContent>
-               <DialogActions>
-               <Button onClick={this.closeModal} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={this.guardarDatos} color="primary">
-            Aceptar
-          </Button>
-        </DialogActions>
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-         
-        </DialogActions>
-      </Dialog>
-    </div>
+                  <DialogContent>
+                          <TextField 
+                            autoFocus 
+                            margin="dense" 
+                            id="id" 
+                            label="id" 
+                            type="text" 
+                            value={this.state.idProducto} 
+                            onChange={this.handleChangeId} 
+                            fullWidth
+                            disabled />
+                          <TextField 
+                            autoFocus 
+                            margin="dense" 
+                            id="articulo" 
+                            label="articulo" 
+                            type="text" 
+                            value={this.state.articulo} 
+                            onChange={this.cambiarArticulo} 
+                            fullWidth />
+                          <Select
+                            labelId="demo-simple-select-label"
+                            margin="dense" 
+                            id="categoria"
+                            fullWidth
+                            value={this.state.categoria}
+                            onChange={this.cambiarCategoria}
+                          >
+                            <MenuItem value={'comida'}>Comida</MenuItem>
+                            <MenuItem value={'bebidas'}>Bebidas</MenuItem>
+                            <MenuItem value={'postre'}>Postre</MenuItem>
+                          </Select>
+                          <TextField 
+                            autoFocus 
+                            margin="dense" 
+                            id="precio" 
+                            label="precio" 
+                            type="text" 
+                            id="precio"
+                            InputProps={{
+                              startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                            }}
+                            value={this.state.precio}
+                            onChange={this.cambiarPrecio}
+                            fullWidth />
+                          <TextField
+                            margin="dense"
+                            id="cantidad"
+                            label="Cantidad"
+                            type="text"
+                            value={this.state.cantidad}
+                            onChange={this.cambiarCantidad}
+                            fullWidth />
+                  </DialogContent>
+                  <DialogActions>
+                        <Button onClick={this.closeModal} color="primary">
+                          Cancel
+                        </Button>
+                        <Button onClick={this.sendUpdate} color="primary">
+                          Actualizar
+                        </Button>
+                      </DialogActions>
+              </DialogContent>
+            :  
+              <DialogContent>
+                  <DialogTitle id="alert-dialog-title">Crear Nuevo Usuario</DialogTitle>
+                    <DialogContentText id="alert-dialog-description">
+                      <DialogContent>
+                        Ingrese los datos del personal autorizado.
+                      </DialogContent>
+                      <DialogContent>
+                      <TextField 
+                            autoFocus 
+                            margin="dense" 
+                            id="id" 
+                            label="id" 
+                            type="text" 
+                            value={this.state.idProducto} 
+                            onChange={this.handleChangeId} 
+                            fullWidth
+                            disabled />
+                          <TextField 
+                            autoFocus 
+                            margin="dense" 
+                            id="articulo" 
+                            label="articulo" 
+                            type="text" 
+                            value={this.state.articulo} 
+                            onChange={this.cambiarArticulo} 
+                            fullWidth />
+                          <Select
+                            labelId="demo-simple-select-label"
+                            label="Categoria"
+                            margin="dense" 
+                            id="categoria"
+                            fullWidth
+                            value={this.state.categoria}
+                            onChange={this.cambiarCategoria}
+                          >
+                            <MenuItem value={'comidas'}>Comidas</MenuItem>
+                            <MenuItem value={'bebidas'}>Bebidas</MenuItem>
+                            <MenuItem value={'postres'}>Postres</MenuItem>
+                          </Select>
+                          <TextField 
+                            autoFocus 
+                            margin="dense" 
+                            id="precio" 
+                            label="precio" 
+                            type="text" 
+                            id="precio"
+                            startAdornment={<InputAdornment position="start">$</InputAdornment>}
+                            value={this.state.precio}
+                            onChange={this.cambiarPrecio}
+                            fullWidth />
+                          <TextField
+                            margin="dense"
+                            id="cantidad"
+                            label="Cantidad"
+                            type="text"
+                            value={this.state.cantidad}
+                            onChange={this.cambiarCantidad}
+                            fullWidth />
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={this.closeModal} color="primary">
+                          Cancel
+                        </Button>
+                        <Button onClick={this.addProduct} color="primary">
+                          Guardar
+                        </Button>
+                      </DialogActions>
+                    </DialogContentText>
+              </DialogContent>
+            }
+          </Dialog>
+        </form>
+            </div>
+        </div>
       </div>
-    </div>
   );
   }
 }

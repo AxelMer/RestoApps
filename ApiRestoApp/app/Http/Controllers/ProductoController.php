@@ -14,19 +14,8 @@ class ProductoController extends Controller
      */
     public function index()
     {
-        //
+        return Producto::all();
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -35,7 +24,17 @@ class ProductoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Producto::create([
+            'articulo' => $request->input('articulo'),
+            'categoria' => $request->input('categoria'),
+            'precio' => $request->input('precio'),
+            'cantidad' => $request->input('cantidad')
+          ]);
+    
+          $response['message'] = "Guardo exitosamente";
+          $response['success'] = true;
+    
+          return $response;
     }
 
     /**
@@ -50,26 +49,21 @@ class ProductoController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Producto  $producto
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Producto $producto)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Producto  $producto
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Producto $producto)
+    public function update(Request $request,$id)
     {
-        //
+        $input = $request->all();
+        $product = Producto::findorfail($id);
+        $updateNow = $product->update($input);
+        $response['message'] = "Se han actualizado los datos";
+        $response['success'] = true;
+  
+        return $response;
     }
 
     /**
@@ -78,8 +72,14 @@ class ProductoController extends Controller
      * @param  \App\Producto  $producto
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Producto $producto)
+    public function destroy(Producto $id)
     {
-        //
+               // Eliminar
+       Producto::destroy($id);
+       // respesta de JSON
+       $response['message'] = "Elimino exitosamente";
+       $response['success'] = true;
+ 
+       return $response;
     }
 }

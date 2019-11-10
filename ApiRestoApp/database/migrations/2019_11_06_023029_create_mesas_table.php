@@ -14,6 +14,7 @@ class CreateMesasTable extends Migration
     public function up()
     {
         Schema::create('mesas', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->Increments('id');
             $table->smallInteger('capacidad');
             $table->boolean('estado')->default(false);

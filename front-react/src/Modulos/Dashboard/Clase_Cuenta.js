@@ -6,7 +6,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Button from '@material-ui/core/Button';
 import EditRoundedIcon from '@material-ui/icons/EditRounded';
 import AddIcon from '@material-ui/icons/Add';
-import { Table } from 'reactstrap';
+import { Table } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -16,130 +16,165 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 
+
 export default class Cuentas extends  React.Component{
   constructor(props){
     super(props);
     this.state = {
-      idUser:'',
       lista:[],
-      name:'',
-      user:'',
+      idUser:'',
+      nombre:'',
+      usuario:'',
       password:'',
-      tipo:'',
+      credencial:'',
       open:false,
+      edit:false
     }
-    this.handleChangeUser = this.handleChangeUser.bind(this);
-    this.handleChangeName  = this.handleChangeName.bind(this);
+    this.handleChangeId = this.handleChangeId.bind(this);
+    this.handleChangeUsuario = this.handleChangeUsuario.bind(this);
+    this.handleChangeNombre = this.handleChangeNombre.bind(this);
     this.handleChangePassword  = this.handleChangePassword.bind(this);
-    this.handleChangeTipo = this.handleChangeTipo.bind(this);
+    this.handleChangeCredencial = this.handleChangeCredencial.bind(this);
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.changeEdit = this.changeEdit.bind(this);
   }
+//Metodo para cargar despues que un componente se invoque
+componentDidMount(){
+  this.loadData()
+}
   //
-  handleChangeUser(event){
-    this.setState({user: event.target.value})
+  handleChangeUsuario(event){
+    this.setState({usuario: event.target.value})
   }
-  handleChangeName(event){
-    this.setState({name: event.target.value})
+  handleChangeNombre(event){
+    this.setState({nombre: event.target.value})
   }
   handleChangePassword(event){
     this.setState({password: event.target.value})
   }
-  handleChangeTipo(event){
-    this.setState({tipo:event.target.value})
+  handleChangeCredencial(event){
+    this.setState({credencial:event.target.value})
   }
+  handleChangeId(event){
+    this.setState({idUser:event.target.value})
+  }
+
+  //Funciones de apertura y cierre del modal
   openModal() {
     this.setState({ open: true });
   }
   closeModal() {
-    this.setState({ open: false });
+    this.setState({ 
+      open: false,
+      edit:false,
+      idUser:'',
+      nombre:'',
+      usuario:'',
+      password:'',
+      credencial:'',
+    });
+  }
+  changeEdit() {
+    this.setState({ edit: true });
   }
 
-//Metodo para cargar despues que un componente se invoque
-componentDidMount(){
-  //Hacemos un GET a la Api de laravel y lo devolvemos
-  axios.get('http://localhost:8000/User')
-  .then(response=>{
-    this.setState({lista:response.data})
-  }).catch(error=>{
-    alert("Error "+error)
-  })
-}
-
-///Metodos para Agregar nuevo Usuario
-addNewUser=(e)=>{
-  e.preventDefault();
-  //tomamos los datos de los State
-  const formData = {
-    name: this.state.name,
-    user: this.state.user,
-    password: this.state.password,
-    tipo: this.state.tipo,
-  };
-  //Hacemos un POST a la Api para crear un nuevo usuario
-
-  const url = 'http://localhost:8000/User/';
-
-  axios.post(url,{formData, withCredentials:true})
-    .then( res=> {
-      console.log(res);
-      console.log(res.data);
+//Metodo para traer la los datos
+  loadData = (e) =>{
+    axios.get('http://localhost:8000/User')
+    .then(response=>{
+      this.setState({lista:response.data})
+    }).catch(error=>{
+      alert("Error "+error)
     })
-    .catch(error=>{
-      console.log(error);
-      console.log(error.res);
-    alert("Error 456"+error)
-    })  
-}
-
-//Metodo Para Editar usuario existente
-editUser=(data)=>{
-    this.setState({
-      idUser: data.id,
-      name: data.name,
-      user: data.user,
-      password: data.password,
-      tipo: data.permiso,
-      open:true
-    })
-}
-
-//Enviamos los datos por medio del PUT
-sendUpdate=(e)=>{
-
-const formData = {
-id: this.state.idUser,
-name: this.state.name,
-user:this.state.user,
-password: this.state.password,
-tipo: this.state.tipo,
-}
-const idU = this.state.idUser 
-axios.put('http://localhost:8000/User/', idU, formData).then(response=>{
-
-     if (response.data.success==true) {
-       alert(response.data.message)
-       // para cargar datos de nuevo
-       this.DataUser()
-       // para cerrar el modal
-     }
-
- }).catch(error=>{
-   alert("Error 456"+error)
- })
-
-}
-
-//Metodo para Eliminar usuario
-deleteUser=(e)=>{
-    //Todo el codigo para eliminar un user de la tabla 
+  }
+///Metodos para Agregar nuevo Usuario  ****FUNCIONANDO****
+  addNewUser=(e)=>{
     e.preventDefault();
-    const formData = {idUser: this.state.idUser};
+      const baseUrl = 'http://localhost:8000/';
 
-    axios.delete(`http://localhost:8000/User/${formData}`)
+      const formData = new FormData()
+        formData.append('nombre',this.state.nombre)
+        formData.append('usuario',this.state.usuario)
+        formData.append('password',this.state.password)
+        formData.append('credencial',this.state.credencial)
+
+        axios.post(baseUrl+'/User',formData).then(response=>{
+            if (response.data.success === true) {
+              alert(response.data.message)
+              // cargar datos de nuevo
+              this.loadData();
+              this.setState({
+                open: false
+              })
+            }
+
+        }).catch(error=>{
+          alert("Error "+error)
+        })
+
+  }
+
+//Metodos Para Editar usuario existente ****FUNCIONANDO****
+  editUser=(data)=>{
+      this.setState({
+        idUser: data.id,
+        nombre: data.nombre,
+        usuario: data.usuario,
+        password: data.password,
+        credencial: data.credencial,
+        open:true,
+        edit:true
+      })
+  }
+  sendUpdate=(e)=>{
+  const formData = {
+  id: this.state.idUser,
+  nombre: this.state.nombre,
+  usuario:this.state.usuario,
+  password: this.state.password,
+  credencial: this.state.credencial,
+  }
+  const baseUrl = 'http://localhost:8000/';
+  const idU = this.state.idUser;
+  console.log(idU)
+  axios.put(baseUrl+'/User/'+idU,formData).then(response=>{
+
+    if (response.data.success===true) {
+      alert(response.data.message)
+      // para cargar datos de nuevo
+      this.loadData();
+      this.setState({
+        open: false
+      })
+    }
+
+  }).catch(error=>{
+    alert("Error 456"+error)
+  })
+
+  }
+
+//Metodos para Eliminar usuario **FUNCIONA CON PROBLEMAS** // Tenes que clickear dos veces
+deleteUser(data){ 
+  // id seleccionado para eliminar
+  this.setState({ idUser:data.id })
+  //console.log(this.state.idUser);
+  //
+  if(this.state.idUser){
+    this.sendDelete()
+  }else{
+    alert("No se puede borrar");
+  }
+
+}
+sendDelete(){
+  const baseUrl = 'http://localhost:8000/';
+    //Todo el codigo para eliminar un user de la tabla 
+ //console.log(this.state.idUser)
+    axios.delete(baseUrl+'/User/'+this.state.idUser)
       .then(res => {
-        console.log(res);
-        console.log(res.data);
+        this.loadData();
       })
       .catch(error=>{
         console.log(error);
@@ -148,21 +183,22 @@ deleteUser=(e)=>{
       })
 }
 
- //Organiza la lista del json que traemos de la API
-  renderList(){
+ //Organizamos los datos en una tabla
+renderList(){
     return this.state.lista.map((data)=>{
         return(
-      <tr>
+      <tr key={data.id}> 
         <td>{data.id}</td>
-        <td>{data.name}</td>
-        <td>{data.user}</td>
+        <td>{data.nombre}</td>
+        <td>{data.usuario}</td>
         <td>{data.password}</td>
-        <td>{data.permiso}</td>
+        <td>{data.credencial}</td>
         <td>
         <Button
           size="small" 
           variant="contained"
           color="primary"
+          value={data.id}
           onClick={()=>this.editUser(data)}
         >
       <EditRoundedIcon/>Edit
@@ -171,8 +207,7 @@ deleteUser=(e)=>{
         size="small" 
         variant="contained"
         color="secondary"
-        value={this.state.idUser}
-        onClick={this.deleteUser}
+        onClick={()=>this.deleteUser(data)}
       >
       <DeleteIcon/>
         Delete
@@ -181,10 +216,9 @@ deleteUser=(e)=>{
       </tr>
     )
   })
-  }
+}
  
 render() {
-  
   return (
       <div>
           <Appheader/>
@@ -194,111 +228,158 @@ render() {
               <hr/>
               </div>
               <div>
-                  <Table className="table" size="sm">
+                  <Table className="table" size="small" aria-label="a dense table" >
                     <thead>
                       <tr>
                         <th>Codigo</th>
                         <th>Nombre</th>
                         <th>Usuario</th>
-                        <th>Tipo</th>
+                        <th>Contraseña</th>
+                        <th>Permiso</th>
                         <th>Opciones</th>
-                        <th></th>
                       </tr>
                     </thead>
                     <tbody>
                       {this.renderList()}
                     </tbody>
-                </Table>
+                  </Table>
               </div>
               <div>
-        <Button
-            size="small" 
-            variant="contained"
-            color="primary"
-            onClick={this.openModal}
-        >
-          <AddIcon/>
-            Nueva cuenta
-        </Button>
-
-        <form >
-        <Dialog
-        open={this.state.open}
-        onClose={this.closeModal}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">Crear Nuevo Usuario</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-          <DialogContent>
-                  <DialogContentText>
-                    Ingrese los datos del personal autorizado.
-                  </DialogContentText>
-                  <TextField
-                  autoFocus
-                  margin="dense"
-                  id="name"
-                  label="Nombre"
-                  type="text"
-                  value={this.state.name}
-                  onChange={this.handleChangeName}
-                  fullWidth
-                   />
-                  <TextField
-                  margin="dense"
-                  id="user"
-                  label="Usuario"
-                  type="text"
-                  value={this.state.user}
-                  onChange={this.handleChangeUser}
-                  fullWidth
-                   />
-                  <TextField
-                  margin="dense"
-                  id="password"
-                  label="Contraseña"
-                  type="password"
-                  value={this.state.password}
-                  onChange={this.handleChangePassword}
-                  fullWidth
-                   />
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="tipo"
-                    fullWidth
-                    value={this.state.tipo}
-                    onChange={this.handleChangeTipo}
-                  >
-                    <MenuItem value={'admin'}>Administrador</MenuItem>
-                    <MenuItem value={'mozo'}>Mozo</MenuItem>
-                    <MenuItem value={'cocina'}>Cocina</MenuItem>
-                  </Select>
-               </DialogContent>
-               <DialogActions>
-                  <Button onClick={this.closeModal} color="primary">
-                    Cancel
-                  </Button>
-                 {this.state.open ?
-                  <Button onClick={this.sendUpdate} color="primary">
-                  Actualizar
-                </Button>
-                :
-                <Button onClick={this.addNewUser} color="primary">
-                Guardar
+              <Button
+                  size="small" 
+                  variant="contained"
+                  color="primary"
+                  onClick={this.openModal}
+              >
+                <AddIcon/>
+                  Nueva cuenta
               </Button>
-                }
-                </DialogActions>
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-         
-        </DialogActions>
-      </Dialog>
-      </form>
-    </div>
+              <form>
+          <Dialog open={this.state.open} onClose={this.closeModal}  disableBackdropClick aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+            {this.state.edit ?  
+              <DialogContent>
+                <DialogTitle id="alert-dialog-title">Modificar datos</DialogTitle>
+                  <DialogContentText id="alert-dialog-description">
+                      Actualizar datos.
+                  </DialogContentText>
+                  <DialogContent>
+                          <TextField 
+                            autoFocus 
+                            margin="dense" 
+                            id="id" 
+                            label="id" 
+                            type="text" 
+                            value={this.state.idUser} 
+                            onChange={this.handleChangeId} 
+                            fullWidth
+                            disabled />
+                          <TextField 
+                            autoFocus 
+                            margin="dense" 
+                            id="nombre" 
+                            label="Nombre" 
+                            type="text" 
+                            value={this.state.nombre} 
+                            onChange={this.handleChangeNombre} 
+                            fullWidth />
+                          <TextField
+                            margin="dense"
+                            id="usuario"
+                            label="Usuario"
+                            type="text"
+                            value={this.state.usuario}
+                            onChange={this.handleChangeUsuario}
+                            fullWidth />
+                          <TextField
+                            margin="dense"
+                            id="password"
+                            label="Contraseña"
+                            type="password"
+                            value={this.state.password}
+                            onChange={this.handleChangePassword}
+                            fullWidth />
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="credencial"
+                            fullWidth
+                            value={this.state.credencial}
+                            onChange={this.handleChangeCredencial}
+                          >
+                            <MenuItem value={'admin'}>Administrador</MenuItem>
+                            <MenuItem value={'mozo'}>Mozo</MenuItem>
+                            <MenuItem value={'cocina'}>Cocina</MenuItem>
+                          </Select>
+                  </DialogContent>
+                  <DialogActions>
+                        <Button onClick={this.closeModal} color="primary">
+                          Cancel
+                        </Button>
+                        <Button onClick={this.sendUpdate} color="primary">
+                          Actualizar
+                        </Button>
+                      </DialogActions>
+              </DialogContent>
+            :  
+              <DialogContent>
+                  <DialogTitle id="alert-dialog-title">Crear Nuevo Usuario</DialogTitle>
+                    <DialogContentText id="alert-dialog-description">
+                      <DialogContent>
+                        Ingrese los datos del personal autorizado.
+                      </DialogContent>
+                      <DialogContent>
+                          <TextField 
+                            autoFocus 
+                            margin="dense" 
+                            id="nombre" 
+                            label="Nombre" 
+                            type="text" 
+                            value={this.state.nombre} 
+                            onChange={this.handleChangeNombre} 
+                            fullWidth />
+                          <TextField
+                            margin="dense"
+                            id="usuario"
+                            label="Usuario"
+                            type="text"
+                            value={this.state.usuario}
+                            onChange={this.handleChangeUsuario}
+                            fullWidth />
+                          <TextField
+                            margin="dense"
+                            id="password"
+                            label="Contraseña"
+                            type="password"
+                            value={this.state.password}
+                            onChange={this.handleChangePassword}
+                            fullWidth />
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="credencial"
+                            fullWidth
+                            value={this.state.credencial}
+                            onChange={this.handleChangeCredencial}
+                          >
+                            <MenuItem value={'admin'}>Administrador</MenuItem>
+                            <MenuItem value={'mozo'}>Mozo</MenuItem>
+                            <MenuItem value={'cocina'}>Cocina</MenuItem>
+                          </Select>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={this.closeModal} color="primary">
+                          Cancel
+                        </Button>
+                        <Button onClick={this.addNewUser} color="primary">
+                          Guardar
+                        </Button>
+                      </DialogActions>
+                    </DialogContentText>
+              </DialogContent>
+            }
+          </Dialog>
+        </form>
+            </div>
+        </div>
       </div>
-    </div>
   );
   }
 }
