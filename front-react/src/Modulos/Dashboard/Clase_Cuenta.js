@@ -21,8 +21,8 @@ export default class Cuentas extends  React.Component{
   constructor(props){
     super(props);
     this.state = {
-      idUser:'',
       lista:[],
+      idUser:'',
       nombre:'',
       usuario:'',
       password:'',
@@ -59,13 +59,21 @@ componentDidMount(){
   handleChangeId(event){
     this.setState({idUser:event.target.value})
   }
+
+  //Funciones de apertura y cierre del modal
   openModal() {
     this.setState({ open: true });
   }
   closeModal() {
     this.setState({ 
       open: false,
-      edit:false });
+      edit:false,
+      idUser:'',
+      nombre:'',
+      usuario:'',
+      password:'',
+      credencial:'',
+    });
   }
   changeEdit() {
     this.setState({ edit: true });
@@ -107,7 +115,7 @@ componentDidMount(){
 
   }
 
-//Metodos Para Editar usuario existente
+//Metodos Para Editar usuario existente ****FUNCIONANDO****
   editUser=(data)=>{
       this.setState({
         idUser: data.id,
@@ -325,7 +333,7 @@ render() {
                             id="nombre" 
                             label="Nombre" 
                             type="text" 
-                            value={this.state.name} 
+                            value={this.state.nombre} 
                             onChange={this.handleChangeNombre} 
                             fullWidth />
                           <TextField
