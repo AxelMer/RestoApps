@@ -14,17 +14,7 @@ class MesaController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return Mesa::all();
     }
 
     /**
@@ -35,7 +25,14 @@ class MesaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Mesa::create([
+            'capacidad' => $request->input('capacidad'),
+          ]);
+    
+          $response['message'] = "Guardo exitosamente";
+          $response['success'] = true;
+    
+          return $response;
     }
 
     /**
@@ -45,17 +42,6 @@ class MesaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Mesa $mesa)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Mesa  $mesa
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Mesa $mesa)
     {
         //
     }

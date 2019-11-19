@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import axios from "axios";
-import Error from "./componente/error";
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';

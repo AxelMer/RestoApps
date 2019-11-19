@@ -85,7 +85,7 @@ export default class Menu extends  React.Component{
         alert("No se puede conectar con el servidor" + error)
       })
     }
-  ///Metodos para Agregar nuevo Usuario  ****FUNCIONANDO****
+  ///Metodos para Agregar nuevo producto  ****FUNCIONANDO****
     addProduct=(e)=>{
       e.preventDefault();
         const baseUrl = 'http://localhost:8000/';
@@ -142,6 +142,11 @@ export default class Menu extends  React.Component{
         // para cargar datos de nuevo
         this.loadData();
         this.setState({
+          idProducto:'',
+          articulo:'',
+          categoria:'',
+          precio:'',
+          cantidad: '',
           open: false
         })
       }
@@ -155,20 +160,17 @@ export default class Menu extends  React.Component{
   //Metodos para Eliminar usuario **FUNCIONA CON PROBLEMAS** // Tenes que clickear dos veces
   productDelete(data){ 
     // id seleccionado para eliminar
-    this.setState({ idProducto:data.id })
-    //console.log(this.state.idUser);
-    //
+    this.setState({ idProducto:data.id }, () => {
     if(this.state.idProducto){
       this.sendDelete()
     }else{
       alert("No se puede borrar");
     }
-  
+    })
   }
   sendDelete(){
     const baseUrl = 'http://localhost:8000/';
       //Todo el codigo para eliminar un user de la tabla 
-   //console.log(this.state.idUser)
       axios.delete(baseUrl+'/Producto/'+this.state.idProducto)
         .then(res => {
           this.loadData();
