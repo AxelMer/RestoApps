@@ -33,29 +33,7 @@ componentDidMount(){
         this.loadData()
 }
 openModal() {
-    this.setState({ open: true });
-            return(
-                <Dialog open={this.state.open} onClose={this.closeModal}  disableBackdropClick aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description"> 
-                  <DialogContent>
-                    <DialogTitle id="alert-dialog-title">Modificar datos</DialogTitle>
-                      <DialogContentText id="alert-dialog-description">
-                          Actualizar datos.
-                      </DialogContentText>
-                      <DialogContent>
-             
-                      </DialogContent>
-                      <DialogActions>
-                            <Button  color="primary">
-                              Cancel
-                            </Button>
-                            <Button  color="primary">
-                              Actualizar
-                            </Button>
-                          </DialogActions>
-                  </DialogContent>
-                </Dialog>
-            )
-   
+    this.setState({ open: true });   
 }
 closeModal() {
     this.setState({ open: false });
@@ -84,13 +62,13 @@ loadData = (e) =>{
                         </Tooltip>      
                     :
                     <Tooltip title={data.id} placement="top">
-                    <Button><DeckIcon className="v" fontSize="large" /> </Button>
+                    <Button onClick={this.openModal}><DeckIcon className="v" fontSize="large" /> </Button>
                 </Tooltip>  
                 }<hr/>  
                     <i><PeopleIcon fontSize="small"/>
                         <Typography>{data.capacidad}</Typography></i>
                                     <hr/>
-                            </Paper>
+                </Paper>
             </Grid>   
         )
       })
@@ -98,11 +76,46 @@ loadData = (e) =>{
 
     render(){
         return(
+            <div>
             <Grid className='centrar'>
                 <Grid container item xs={20} spacing={1}>
                     {this.renderList()}
                 </Grid>
             </Grid>
+                          <form>
+                          <Dialog open={this.state.open} onClose={this.closeModal}   aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description"> 
+                              <DialogContent>
+                                  <div>
+                                    <Grid container spacing={3}>
+                                        <Grid item xs={12}>
+                                        <Paper>Fluid grids use columns that scale and resize content. A fluid grid’s layout can use breakpoints to determine if the layout needs to change dramatically.</Paper>
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                        <Paper >Bebidas</Paper>
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                        <Paper >Comidas</Paper>
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                        <Paper>Postres</Paper>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                        <Paper>Lista de pedidos</Paper>
+
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                        <Paper>Lista de productos</Paper>
+
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                        <Paper>Realizar Pedido</Paper>
+                                        </Grid>
+                                    </Grid>
+                                    </div>
+                              </DialogContent>
+                          </Dialog>
+                        </form>
+                        </div>
         )
     }
 }
