@@ -104,7 +104,13 @@ componentDidMount(){
               alert(response.data.message)
               // cargar datos de nuevo
               this.loadData();
-              this.setState({
+              this.setState
+              ({
+                idUser:'',
+                nombre:'',
+                usuario:'',
+                password:'',
+                credencial:'',
                 open: false
               })
             }

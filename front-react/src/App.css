@@ -43,6 +43,7 @@
 }
 .centrar
 {
+
   position: absolute;
   /*nos posicionamos en el centro del navegador*/
   top:30%;
@@ -52,7 +53,7 @@
   /*indicamos que el margen izquierdo, es la mitad de la anchura*/
   margin-left:-200px;
   /*determinamos una altura*/
-  height:400px;
+  height:auto;
   /*indicamos que el margen superior, es la mitad de la altura*/
   margin-top:-150px;
   border:1px solid #808080;

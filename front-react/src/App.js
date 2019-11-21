@@ -15,7 +15,7 @@ function App() {
       <header className="App-header">
         
         <Router>
-        <Switch>
+          <Switch>
             <Route exact path="/" component={Login} />
             <Route path="/salon" component={Salon} />
             <Route exact path="/home" component={Home} />

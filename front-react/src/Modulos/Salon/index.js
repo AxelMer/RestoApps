@@ -14,12 +14,19 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Checkbox from '@material-ui/core/Checkbox';
+
 export default class Salon extends React.Component{
 constructor(props){
         super(props);
         this.state = {
           idMesa:'',
           lista:[],
+          listB:[],
           capacidad:'',
           estado:'',
           open:false,
@@ -49,7 +56,7 @@ loadData = (e) =>{
         })
 }
 
-  renderList(){
+renderList(){
     return this.state.lista.map((data)=>{
         return(
             <Grid item xs={2} zeroMinWidth>
@@ -72,7 +79,7 @@ loadData = (e) =>{
             </Grid>   
         )
       })
-      }
+}
 
     render(){
         return(
@@ -88,27 +95,20 @@ loadData = (e) =>{
                                   <div>
                                     <Grid container spacing={3}>
                                         <Grid item xs={12}>
-                                        <Paper>Fluid grids use columns that scale and resize content. A fluid grid’s layout can use breakpoints to determine if the layout needs to change dramatically.</Paper>
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                        <Paper >Bebidas</Paper>
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                        <Paper >Comidas</Paper>
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                        <Paper>Postres</Paper>
+                                        <h2>Realizar Pedido</h2>
                                         </Grid>
                                         <Grid item xs={6}>
                                         <Paper>Lista de pedidos</Paper>
 
                                         </Grid>
                                         <Grid item xs={6}>
+                                        <Button id="bebidas" color="primary">Bebidas</Button>
+                                        <Button id="comidas" color="primary">Comidas</Button>
+                                        <Button id="postres" color="primary">Postres</Button> 
                                         <Paper>Lista de productos</Paper>
-
                                         </Grid>
                                         <Grid item xs={3}>
-                                        <Paper>Realizar Pedido</Paper>
+                                            <Button >Realizar Pedido</Button>
                                         </Grid>
                                     </Grid>
                                     </div>
