@@ -99,7 +99,7 @@ componentDidMount(){
         formData.append('password',this.state.password)
         formData.append('credencial',this.state.credencial)
 
-        axios.post(baseUrl+'/User',formData).then(response=>{
+        axios.post(baseUrl+'/user',formData).then(response=>{
             if (response.data.success === true) {
               alert(response.data.message)
               // cargar datos de nuevo

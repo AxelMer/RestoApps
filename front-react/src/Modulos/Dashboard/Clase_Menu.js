@@ -78,7 +78,9 @@ export default class Menu extends  React.Component{
   
   //Metodo para traer la los datos
     loadData = (e) =>{
-      axios.get('http://localhost:8000/Producto')
+
+      axios.get('http://localhost:8000/productos',  { 
+       })
       .then(response=>{
         this.setState({lista:response.data})
       }).catch(error=>{
@@ -96,12 +98,17 @@ export default class Menu extends  React.Component{
           formData.append('precio',this.state.precio)
           formData.append('cantidad',this.state.cantidad)
   
-          axios.post(baseUrl+'/Producto',formData).then(response=>{
+          axios.post(baseUrl+'/productos',formData).then(response=>{
               if (response.data.success === true) {
                 alert(response.data.message)
                 // cargar datos de nuevo
                 this.loadData();
                 this.setState({
+                  idProducto:'',
+                  articulo:'',
+                  categoria:'',
+                  precio:'',
+                  cantidad: '',
                   open: false
                 })
               }
@@ -135,7 +142,7 @@ export default class Menu extends  React.Component{
     const baseUrl = 'http://localhost:8000/';
     const idU = this.state.idProducto;
     console.log(idU)
-    axios.put(baseUrl+'/Producto/'+idU,formData).then(response=>{
+    axios.put(baseUrl+'/productos/'+idU,formData).then(response=>{
   
       if (response.data.success===true) {
         alert(response.data.message)
@@ -171,7 +178,7 @@ export default class Menu extends  React.Component{
   sendDelete(){
     const baseUrl = 'http://localhost:8000/';
       //Todo el codigo para eliminar un user de la tabla 
-      axios.delete(baseUrl+'/Producto/'+this.state.idProducto)
+      axios.delete(baseUrl+'/productos/'+this.state.idProducto)
         .then(res => {
           this.loadData();
         })

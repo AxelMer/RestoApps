@@ -6,7 +6,9 @@ import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import  Avatar from '@material-ui/core/Avatar';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
-import Grid from '@material-ui/core/Grid'; 
+import Grid from '@material-ui/core/Grid';
+import axios from 'axios';
+
 export default class Login extends Component{
   constructor(props){
     super(props);
@@ -16,16 +18,27 @@ export default class Login extends Component{
       password:'',
       credencial:'',
     }
-   /* this.handleChangeId = this.handleChangeId.bind(this);
-    this.handleChangeUsuario = this.handleChangeUsuario.bind(this);
-    this.handleChangeNombre = this.handleChangeNombre.bind(this);
-    this.handleChangePassword  = this.handleChangePassword.bind(this);
-    this.handleChangeCredencial = this.handleChangeCredencial.bind(this);
-    this.openModal = this.openModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
-    this.changeEdit = this.changeEdit.bind(this);
-  */
+    this.cambiarUsuario = this.cambiarUsuario.bind(this);
+    this.cambiarPassword  = this.cambiarPassword.bind(this);
   }
+  cambiarUsuario(event){
+    this.setState({usuario: event.target.value})
+  }
+  cambiarPassword(event){
+    this.setState({password: event.target.value})
+  }
+sendLogin(){
+  var headers = { 
+    'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest'
+   } 
+  axios.post('http://localhost:8000/login', headers)
+  .then(response=>{
+    
+  }).catch(error=>{
+    alert("No se puede conectar con el servidor" + error)
+  })
+}
 
 render() {
   return (
@@ -52,7 +65,9 @@ render() {
             fullWidth
             id="cuenta"
             label="Cuenta de usuario"
-            name="cuenta"
+            name="usuario"
+            value={this.state.usuario} 
+            onChange={this.cambiarUsuario} 
             autoFocus
           />
             </div>
@@ -66,6 +81,8 @@ render() {
             label="Contraseña"
             type="password"
             id="password"
+            value={this.state.password} 
+            onChange={this.cambiarPassword} 
           />
             </div>
             <div className="mt-4">
@@ -74,7 +91,7 @@ render() {
             fullWidth
             variant="contained"
             color="primary"
-            className=""
+            onClick={this.sendLogin}
           >
             Ingresar
           </Button>

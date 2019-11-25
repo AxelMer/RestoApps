@@ -13,12 +13,13 @@ use Illuminate\Http\Request;
 |
 */
 
-/*
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-*/
-Route::apiResource('User', 'UserController');
-Route::apiResource('Producto', 'ProductoController');
-Route::apiResource('Pedido', 'PedidoController');
-Route::apiResource('Mesa', 'MesaController');
+Route::apiResource('user', 'UserController');
+//Route::post('login', 'UserController@login');
+Route::apiResource('productos', 'ProductoController');
+Route::apiResource('pedidos', 'PedidoController');
+Route::apiResource('mesas', 'MesaController');
+/*Route::middleware('auth:api')->group(function () {
+    Route::apiResource('productos', 'ProductoController');
+    Route::apiResource('pedidos', 'PedidoController');
+    Route::apiResource('mesas', 'MesaController');
+});*/

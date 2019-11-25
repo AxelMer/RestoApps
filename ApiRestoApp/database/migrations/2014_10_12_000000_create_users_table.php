@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('usuario', 50)->unique();
             $table->string('password');
             $table->string('credencial');
+            $table->boolean('remember_me')->default(false);
             $table->timestamps();
         });
     }

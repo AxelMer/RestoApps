@@ -41,7 +41,7 @@ handleChangeEstado(event){
 }
 //Metodo para traer la los datos
 loadData = (e) =>{
-  axios.get('http://localhost:8000/Mesa')
+  axios.get('http://localhost:8000/mesas')
   .then(response=>{
     this.setState({lista:response.data})
   }).catch(error=>{
@@ -55,7 +55,7 @@ addMesa=(e)=>{
     const formData = new FormData()
       formData.append('capacidad',this.state.capacidad)
 
-      axios.post(baseUrl+'/Mesa',formData).then(response=>{
+      axios.post(baseUrl+'/mesas',formData).then(response=>{
           if (response.data.success === true) {
             alert(response.data.message)
             // cargar datos de nuevo

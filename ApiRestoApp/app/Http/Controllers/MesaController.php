@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class MesaController extends Controller
 {
+    public function __construct()
+    {
+      //$this->middleware('client');
+    }
     /**
      * Display a listing of the resource.
      *
