@@ -2,9 +2,7 @@ import React from 'react';
 import '../../App.css';
 import Appheader from '../../componentes/appHeader';
 import axios from 'axios';
-import DeleteIcon from '@material-ui/icons/Delete';
 import Button from '@material-ui/core/Button';
-import EditRoundedIcon from '@material-ui/icons/EditRounded';
 import AddIcon from '@material-ui/icons/Add';
 import { Table } from 'reactstrap';
 import Dialog from '@material-ui/core/Dialog';
@@ -13,36 +11,67 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
+
 
 export default class Salon extends  React.Component{
   constructor(props){
     super(props);
     this.state = {
-      idUser:0,
+      idMesa:'',
       lista:[],
       capacidad:'',
       estado:'',
       open:false,
     }
-    this.handleChangeUser = this.handleChangeUser.bind(this);
     this.handleChangeCapacidad  = this.handleChangeCapacidad.bind(this);
     this.handleChangeEstado  = this.handleChangeEstado.bind(this);
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
   }
-//Los cambios de los inputs
-handleChangeUser(event){
-  this.setState({user: event.target.value})
+
+componentDidMount(){
+    this.loadData()
 }
+//Los cambios de los inputs
 handleChangeCapacidad(event){
   this.setState({capacidad: event.target.value})
 }
 handleChangeEstado(event){
   this.setState({estado: event.target.value})
 }
+//Metodo para traer la los datos
+loadData = (e) =>{
+  axios.get('http://localhost:8000/mesas')
+  .then(response=>{
+    this.setState({lista:response.data})
+  }).catch(error=>{
+    alert("No se puede conectar con el servidor" + error)
+  })
+}
+///Metodos para Agregar nuevo Usuario  ****FUNCIONANDO****
+addMesa=(e)=>{
+  e.preventDefault();
+    const baseUrl = 'http://localhost:8000/';
+    const formData = new FormData()
+      formData.append('capacidad',this.state.capacidad)
 
+      axios.post(baseUrl+'/mesas',formData).then(response=>{
+          if (response.data.success === true) {
+            alert(response.data.message)
+            // cargar datos de nuevo
+            this.loadData();
+            this.setState({
+              capacidad:'',
+              estado:'',
+              open: false
+            })
+          }
+
+      }).catch(error=>{
+        alert("Error "+error)
+      })
+
+}
 
 //Configuracion del estado del Modal
 openModal() {
@@ -52,84 +81,22 @@ closeModal() {
   this.setState({ open: false });
 }
 
-//Metodo para editar usuario
-  editUserExits(){
-    //Editar un user existente
-  }
-//Metodo para Crear Nuevo Usuario
-guardarDatos(e){
-  e.preventDefault();
-  const formData = {
-    capacidad: this.state.capacidad,
-    estado: this.state.estado,
-  }
-  const url = 'http://localhost:8000/Mesas/';
-
-  axios.post(url,{formData, withCredentials:true})
-    .then( res=> {
-      console.log(res);
-      console.log(res.data);
-    })
-    .catch(error=>{
-      console.log(error);
-      console.log(error.res);
-    alert("Error 456"+error)
-    })
-}
-
-//Metodo para Eliminar usuario
-deleteUser=(e)=>{
-  //Todo el codigo para eliminar un user de la tabla 
-  e.preventDefault();
-  const formData = {idUser: this.state.idUser};
-
-  axios.delete(`http://localhost:8000/Mesas/${formData}`)
-    .then(res => {
-      console.log(res);
-      console.log(res.data);
-    })
-    .catch(error=>{
-      console.log(error);
-      console.log(error.data);
-      alert("Error 456"+error)
-    })
-}
-
-  componentDidMount(){
-
-    axios.get('http://localhost:8000/Mesas')
-    .then(response=>{
-      this.setState({lista:response.data})
-    }).catch(error=>{
-      alert("Error "+error)
-    })
- }
  //Organiza la lista del json que traemos de la API
   renderList(){
+
     return this.state.lista.map((data)=>{
         return(
       <tr>
         <td>{data.id}</td>
         <td>{data.capacidad}</td>
-        <td>{data.estado}</td>
-        <td>
-        <Button
-        size="small" 
-        variant="contained"
-        color="primary"
-      >
-      <EditRoundedIcon/>Edit
-      </Button>
-        <Button
-        size="small" 
-        variant="contained"
-        color="secondary"
-      >
-      <DeleteIcon/>
-        Delete
-      </Button>
-        </td>
-      </tr>
+        <td> 
+          {data.estado === 1 ? 
+        <i className="r">Ocupado</i>
+        :
+       <i className="v">Libre</i>
+      }
+      </td>
+    </tr>
     )
   })
   }
@@ -148,11 +115,9 @@ render() {
                   <Table className="table" size="sm">
                     <thead>
                       <tr>
-                        <th>Codigo</th>
+                        <th>Mesa</th>
                         <th>Capacidad</th>
                         <th>Estado</th>
-                        <th></th>
-                        <th></th>
                       </tr>
                     </thead>
                     <tbody>
@@ -186,30 +151,19 @@ render() {
                   <TextField
                   autoFocus
                   margin="dense"
-                  id="cantidad"
+                  id="capacidad"
                   label="Sillas"
                   type="number"
-                  value={this.state.cantidad}
-                  onChange={this.handleChangeCantidad}
+                  value={this.state.capacidad}
+                  onChange={this.handleChangeCapacidad}
                   fullWidth
                    />
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="tipo"
-                    fullWidth
-                    value={this.state.estado}
-                    onChange={this.handleChangeEstado}
-                  >
-                    <MenuItem value={'libre'}>Libre</MenuItem>
-                    <MenuItem value={'ocupada'}>Ocupada</MenuItem>
-                    <MenuItem value={'reservada'}>Reservada</MenuItem>
-                  </Select>
                </DialogContent>
                <DialogActions>
                <Button onClick={this.closeModal} color="primary">
             Cancel
           </Button>
-          <Button onClick={this.guardarDatos} color="primary">
+          <Button onClick={this.addMesa} color="primary">
             Aceptar
           </Button>
         </DialogActions>

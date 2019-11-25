@@ -78,14 +78,16 @@ export default class Menu extends  React.Component{
   
   //Metodo para traer la los datos
     loadData = (e) =>{
-      axios.get('http://localhost:8000/Producto')
+
+      axios.get('http://localhost:8000/productos',  { 
+       })
       .then(response=>{
         this.setState({lista:response.data})
       }).catch(error=>{
         alert("No se puede conectar con el servidor" + error)
       })
     }
-  ///Metodos para Agregar nuevo Usuario  ****FUNCIONANDO****
+  ///Metodos para Agregar nuevo producto  ****FUNCIONANDO****
     addProduct=(e)=>{
       e.preventDefault();
         const baseUrl = 'http://localhost:8000/';
@@ -96,12 +98,17 @@ export default class Menu extends  React.Component{
           formData.append('precio',this.state.precio)
           formData.append('cantidad',this.state.cantidad)
   
-          axios.post(baseUrl+'/Producto',formData).then(response=>{
+          axios.post(baseUrl+'/productos',formData).then(response=>{
               if (response.data.success === true) {
                 alert(response.data.message)
                 // cargar datos de nuevo
                 this.loadData();
                 this.setState({
+                  idProducto:'',
+                  articulo:'',
+                  categoria:'',
+                  precio:'',
+                  cantidad: '',
                   open: false
                 })
               }
@@ -135,13 +142,18 @@ export default class Menu extends  React.Component{
     const baseUrl = 'http://localhost:8000/';
     const idU = this.state.idProducto;
     console.log(idU)
-    axios.put(baseUrl+'/Producto/'+idU,formData).then(response=>{
+    axios.put(baseUrl+'/productos/'+idU,formData).then(response=>{
   
       if (response.data.success===true) {
         alert(response.data.message)
         // para cargar datos de nuevo
         this.loadData();
         this.setState({
+          idProducto:'',
+          articulo:'',
+          categoria:'',
+          precio:'',
+          cantidad: '',
           open: false
         })
       }
@@ -155,21 +167,18 @@ export default class Menu extends  React.Component{
   //Metodos para Eliminar usuario **FUNCIONA CON PROBLEMAS** // Tenes que clickear dos veces
   productDelete(data){ 
     // id seleccionado para eliminar
-    this.setState({ idProducto:data.id })
-    //console.log(this.state.idUser);
-    //
+    this.setState({ idProducto:data.id }, () => {
     if(this.state.idProducto){
       this.sendDelete()
     }else{
       alert("No se puede borrar");
     }
-  
+    })
   }
   sendDelete(){
     const baseUrl = 'http://localhost:8000/';
       //Todo el codigo para eliminar un user de la tabla 
-   //console.log(this.state.idUser)
-      axios.delete(baseUrl+'/Producto/'+this.state.idProducto)
+      axios.delete(baseUrl+'/productos/'+this.state.idProducto)
         .then(res => {
           this.loadData();
         })

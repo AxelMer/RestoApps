@@ -99,12 +99,18 @@ componentDidMount(){
         formData.append('password',this.state.password)
         formData.append('credencial',this.state.credencial)
 
-        axios.post(baseUrl+'/User',formData).then(response=>{
+        axios.post(baseUrl+'/user',formData).then(response=>{
             if (response.data.success === true) {
               alert(response.data.message)
               // cargar datos de nuevo
               this.loadData();
-              this.setState({
+              this.setState
+              ({
+                idUser:'',
+                nombre:'',
+                usuario:'',
+                password:'',
+                credencial:'',
                 open: false
               })
             }
@@ -145,7 +151,12 @@ componentDidMount(){
       // para cargar datos de nuevo
       this.loadData();
       this.setState({
-        open: false
+        open: false,
+        idUser:'',
+        nombre:'',
+        usuario:'',
+        password:'',
+        credencial:'',
       })
     }
 
@@ -158,20 +169,16 @@ componentDidMount(){
 //Metodos para Eliminar usuario **FUNCIONA CON PROBLEMAS** // Tenes que clickear dos veces
 deleteUser(data){ 
   // id seleccionado para eliminar
-  this.setState({ idUser:data.id })
-  //console.log(this.state.idUser);
-  //
+  this.setState({ idUser:data.id }, () =>{
   if(this.state.idUser){
     this.sendDelete()
   }else{
     alert("No se puede borrar");
   }
-
+  })
 }
 sendDelete(){
   const baseUrl = 'http://localhost:8000/';
-    //Todo el codigo para eliminar un user de la tabla 
- //console.log(this.state.idUser)
     axios.delete(baseUrl+'/User/'+this.state.idUser)
       .then(res => {
         this.loadData();

@@ -34,6 +34,31 @@
   font-family: Georgia, 'Times New Roman', Times, serif;
   font-size: 16px;
 }
+
+.v{
+  color: green;
+}
+.r{
+  color:red;
+}
+.centrar
+{
+
+  position: absolute;
+  /*nos posicionamos en el centro del navegador*/
+  top:30%;
+  left:30%;
+  /*determinamos una anchura*/
+  width:70%;
+  /*indicamos que el margen izquierdo, es la mitad de la anchura*/
+  margin-left:-200px;
+  /*determinamos una altura*/
+  height:auto;
+  /*indicamos que el margen superior, es la mitad de la altura*/
+  margin-top:-150px;
+  border:1px solid #808080;
+  padding:5px;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
