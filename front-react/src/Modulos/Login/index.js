@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
+import {FormGroup, Col} from 'reactstrap';
 import TextField from '@material-ui/core/TextField';
 import  Avatar from '@material-ui/core/Avatar';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
@@ -44,62 +44,71 @@ render() {
   return (
     <React.Fragment>
    <CssBaseline />
-    <Container maxWidth="xs">
+   <form>
       <div>
-      <Grid container justify="center" alignItems="center">
-        <Avatar container justify="center" alignItems="center">
-          <FastfoodIcon />
-        </Avatar>
-      </Grid>
+        <Grid container justify="center" alignItems="center">
+          <Avatar container justify="center" alignItems="center">
+            <FastfoodIcon />
+          </Avatar>
+        </Grid>
         <Typography component="h1" variant="h5">
           Ingresa a Restoapp
         </Typography>
       </div>
-      <form>
-          <div className="p-4">
-            <div className="mt-4">
-            <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="cuenta"
-            label="Cuenta de usuario"
-            name="usuario"
-            value={this.state.usuario} 
-            onChange={this.cambiarUsuario} 
-            autoFocus
-          />
-            </div>
-            <div className="mt-4">
-            <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Contraseña"
-            type="password"
-            id="password"
-            value={this.state.password} 
-            onChange={this.cambiarPassword} 
-          />
-            </div>
-            <div className="mt-4">
-            <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            onClick={this.sendLogin}
-          >
-            Ingresar
-          </Button>
-            </div>
+      <div class="container" id="modal-body">
+        <div class="card" id="card">
+          <div class="card-body">
+             <FormGroup row>    
+              <Col sm={12}>           
+                <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="cuenta"
+                label="Cuenta de usuario"
+                name="usuario"
+                value={this.state.usuario} 
+                onChange={this.cambiarUsuario} 
+                autoFocus
+                />
+              </Col> 
+              </FormGroup>
+              <FormGroup row>
+              <Col sm={12}> 
+                <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Contraseña"
+                type="password"
+                id="password"
+                value={this.state.password} 
+                onChange={this.cambiarPassword} 
+               />
+              </Col>
+              </FormGroup>
+              <FormGroup>
+              <Col sm={12}>
+                <Button
+                type="submit"
+                required
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={this.sendLogin}
+                >
+                Ingresar
+                </Button>
+              </Col>
+              </FormGroup>
           </div>
-        </form>
-    </Container>
-    </React.Fragment>
+        </div>
+      </div>      
+    </form>
+  </React.Fragment>
   );
 }
 }
