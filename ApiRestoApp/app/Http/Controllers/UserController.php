@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
 class UserController extends Controller
 {
-
+  public function __construct()
+  {
+      $this->middleware('jwt.verify', ['except' => ['register', 'authenticate', 'store']]);
+  }
 
     /**
      * Display a listing of the resource.
@@ -27,56 +32,52 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function login (Request $request) {
-      $request->validate([
-        'usuario'       => 'required|string',
-        'password'    => 'required|string',
-        'remember_me' => 'boolean',
-    ]);
-      $credentials = request(['usuario', 'password']);
-      if (!Auth::attempt($credentials)) {
-          return response()->json([
-              'message' => 'Unauthorized'], 401);
-      }
-      $user = $request->user();
-      $tokenResult = $user->createToken('Personal Access Token');
-      $token = $tokenResult->token;
-      if ($request->remember_me) {
-          $token->expires_at = Carbon::now()->addWeeks(1);
-      }
-      $token->save();
-      return response()->json([
-          'access_token' => $tokenResult->accessToken,
-          'token_type'   => 'Bearer',
-          'expires_at'   => Carbon::parse(
-              $tokenResult->token->expires_at)
-                  ->toDateTimeString(),
-      ]);
+    public function authenticate(Request $request)
+    {
+        $credentials = $request->only('usuario', 'password');
+
+        try {
+            if (! $token = JWTAuth::attempt($credentials)) {
+                return response()->json(['error' => 'Credencial Invalidas'], 400);
+            }
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'could_not_create_token'], 500);
+        }
+        return response()->json(compact('token'));
     }
-    public function logout (Request $request) {
-
-        $token = $request->user()->token();
-        $token->revoke();
-
-        $response = 'You have been succesfully logged out!';
-        return response($response, 200);
+    /*public function getAuthenticatedUser()
+    {
+        try {
+            if (!$user = JWTAuth::parseToken()->authenticate()) {
+                    return response()->json(['user_not_found'], 404);
+            }
+            } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+                    return response()->json(['token_expired'], $e->getStatusCode());
+            } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+                    return response()->json(['token_invalid'], $e->getStatusCode());
+            } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
+                    return response()->json(['token_absent'], $e->getStatusCode());
+            }
+            return response()->json(compact('user'));
+    }*/
+    public function register(Request $request)
+    {
+      $input = $request->only('nombre','usuario', 'password','crdencial');
+      User::create($input);
 
     }
     public function store(Request $request){
-
-          $user = User::create([
+        User::create([
             'nombre' => $request->input('nombre'),
             'usuario' => $request->input('usuario'),
-            'password' => $request->input('password'),
+            'password' =>  \Hash::make($request->input('password')) ,
             'credencial' => $request->input('credencial')
           ]);
-   
-          $token = $user->createToken('restoapp')->accessToken;
+    
           $response['message'] = "Guardo exitosamente";
           $response['success'] = true;
-          $response['token'] = response()->json(['token' => $token], 200);
+    
           return $response;
-
     }
     /**
      * Display the specified resource.
@@ -84,8 +85,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id){
         $edit = User::find($id);
         return $edit->toArray();
     }

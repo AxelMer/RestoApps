@@ -81,7 +81,7 @@ componentDidMount(){
 
 //Metodo para traer la los datos
   loadData = (e) =>{
-    axios.get('http://localhost:8000/User')
+    axios.get('http://localhost:8000/user')
     .then(response=>{
       this.setState({lista:response.data})
     }).catch(error=>{
