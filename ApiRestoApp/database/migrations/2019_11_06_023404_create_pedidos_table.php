@@ -16,17 +16,15 @@ class CreatePedidosTable extends Migration
         Schema::create('pedidos', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->Increments('id');
-            $table->integer('idMesa');
-            $table->integer('idProductos');
+            $table->unsignedInteger('idMesa');
+            $table->json('productos');
             $table->timestamps();
 
 
             $table->foreign('idMesa')
                                 ->references('id')->on('mesas')
                                 ->onDelete('cascade');
-            $table->foreign('idProductos')
-                                ->references('id')->on('productos')
-                                ->onDelete('cascade');
+
         });
     }
 

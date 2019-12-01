@@ -28,13 +28,11 @@ export default class Login extends Component{
     this.setState({password: event.target.value})
   }
 sendLogin(){
-  var headers = { 
-    'Content-Type': 'application/json',
-    'X-Requested-With': 'XMLHttpRequest'
-   } 
-  axios.post('http://localhost:8000/login', headers)
+  axios.post('http://localhost:8000/api/auth/login')
   .then(response=>{
-    
+      localStorage.setItem('token', JSON.stringify(response.data));
+      console.log(localStorage)
+      this.props.history.push('/home');
   }).catch(error=>{
     alert("No se puede conectar con el servidor" + error)
   })
@@ -43,72 +41,72 @@ sendLogin(){
 render() {
   return (
     <React.Fragment>
-   <CssBaseline />
-   <form>
-      <div>
-        <Grid container justify="center" alignItems="center">
-          <Avatar container justify="center" alignItems="center">
-            <FastfoodIcon />
-          </Avatar>
-        </Grid>
-        <Typography component="h1" variant="h5">
-          Ingresa a Restoapp
-        </Typography>
-      </div>
-      <div class="container" id="modal-body">
-        <div class="card" id="card">
-          <div class="card-body">
-             <FormGroup row>    
-              <Col sm={12}>           
-                <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="cuenta"
-                label="Cuenta de usuario"
-                name="usuario"
-                value={this.state.usuario} 
-                onChange={this.cambiarUsuario} 
-                autoFocus
+    <CssBaseline />
+    <form>
+       <div>
+         <Grid container justify="center" alignItems="center">
+           <Avatar container justify="center" alignItems="center">
+             <FastfoodIcon />
+           </Avatar>
+         </Grid>
+         <Typography component="h1" variant="h5">
+           Ingresa a Restoapp
+         </Typography>
+       </div>
+       <div className="container" id="modal-body">
+         <div className="card" id="card">
+           <div className="card-body">
+              <FormGroup row>    
+               <Col sm={10}>           
+                 <TextField
+                 variant="outlined"
+                 margin="normal"
+                 required
+                 fullWidth
+                 id="cuenta"
+                 label="Cuenta de usuario"
+                 name="usuario"
+                 value={this.state.usuario} 
+                 onChange={this.cambiarUsuario} 
+                 autoFocus
+                 />
+               </Col> 
+               </FormGroup>
+               <FormGroup row>
+               <Col sm={10}> 
+                 <TextField
+                 variant="outlined"
+                 margin="normal"
+                 required
+                 fullWidth
+                 name="password"
+                 label="Contraseña"
+                 type="password"
+                 id="password"
+                 value={this.state.password} 
+                 onChange={this.cambiarPassword} 
                 />
-              </Col> 
-              </FormGroup>
-              <FormGroup row>
-              <Col sm={12}> 
-                <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Contraseña"
-                type="password"
-                id="password"
-                value={this.state.password} 
-                onChange={this.cambiarPassword} 
-               />
-              </Col>
-              </FormGroup>
-              <FormGroup>
-              <Col sm={12}>
-                <Button
-                type="submit"
-                required
-                fullWidth
-                variant="contained"
-                color="primary"
-                onClick={this.sendLogin}
-                >
-                Ingresar
-                </Button>
-              </Col>
-              </FormGroup>
-          </div>
-        </div>
-      </div>      
-    </form>
-  </React.Fragment>
+               </Col>
+               </FormGroup>
+               <FormGroup>
+               <Col sm={10}>
+                 <Button
+                 required
+                 fullWidth
+                 variant="contained"
+                 color="primary"
+                 onClick={this.sendLogin}
+                 >
+                 Ingresar
+                 </Button>
+               </Col>
+               </FormGroup>
+           </div>
+         </div>
+       </div>      
+     </form>
+   </React.Fragment>
   );
 }
 }
+
