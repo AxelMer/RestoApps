@@ -27,14 +27,18 @@ export default class Login extends Component{
   cambiarPassword(event){
     this.setState({password: event.target.value})
   }
-sendLogin(){
-  axios.post('http://localhost:8000/api/auth/login')
-  .then(response=>{
-      localStorage.setItem('token', JSON.stringify(response.data));
+sendLogin = (e)=>{
+  const formData = new FormData()
+        formData.append('usuario',this.state.usuario)
+        formData.append('password',this.state.password)
+
+  axios.post('http://localhost:8000/api/auth/login', formData)
+  .then( response =>{
+      localStorage.setItem('access_token', JSON.stringify(response.data));
       console.log(localStorage)
       this.props.history.push('/home');
   }).catch(error=>{
-    alert("No se puede conectar con el servidor" + error)
+      alert("No se puede conectar con el servidor" + error)
   })
 }
 
