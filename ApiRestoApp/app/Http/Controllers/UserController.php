@@ -9,6 +9,11 @@ use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 class UserController extends Controller
 {
+  public function __construct()
+  {
+    $this->middleware('auth:api', ['except' => ['login']]);
+  }
+
     /**
      * Display a listing of the resource.
      *

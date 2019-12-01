@@ -4,7 +4,7 @@ import Appheader from '../../componentes/appHeader';
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
-import { Table } from 'reactstrap';
+import { Table, Typography } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -45,7 +45,10 @@ loadData = (e) =>{
   .then(response=>{
     this.setState({lista:response.data})
   }).catch(error=>{
-    alert("No se puede conectar con el servidor" + error)
+    this.setState({
+      error:true,
+      message:'El servidor no responde '
+    })
   })
 }
 ///Metodos para Agregar nuevo Usuario  ****FUNCIONANDO****
@@ -112,29 +115,45 @@ render() {
               <hr/>
               </div>
               <div>
-                  <Table className="table" size="sm">
+                {this.state.error === true ?
+                  <Table className="table" size="small" aria-label="a dense table" >
                     <thead>
                       <tr>
-                        <th>Mesa</th>
-                        <th>Capacidad</th>
-                        <th>Estado</th>
+                      <Typography className="message" variant='overline'  disabled>{this.state.message}</Typography>
                       </tr>
                     </thead>
-                    <tbody>
-                      {this.renderList()}
-                    </tbody>
-                </Table>
+                  </Table>
+                  :
+                  <Table className="table" size="small" aria-label="a dense table" >
+                    <thead>
+                      <tr>
+                        <th>Codigo</th>
+                        <th>Nombre</th>
+                        <th>Usuario</th>
+                        <th>Contraseña</th>
+                        <th>Permiso</th>
+                        <th>Opciones</th>
+                      </tr>
+                    </thead>
+                        <tbody>
+                        {this.renderList()}
+                        </tbody>
+                  </Table>
+                }
+                  
               </div>
               <div>
-        <Button
-            size="small" 
-            variant="contained"
-            color="primary"
-            onClick={this.openModal}
-        >
-          <AddIcon/>
-            Agregar Nueva Mesa
-        </Button>
+              {this.state.error === true ?
+                  <Button size="small" variant="contained" color="primary" onClick={this.openModal} disabled>
+                    <AddIcon/>
+                    Agregar Producto
+                  </Button>               
+                  :
+                  <Button size="small" variant="contained" color="primary" onClick={this.openModal} >
+                    <AddIcon/>
+                    Agregar Producto
+                  </Button>   
+                }
       <Dialog
         open={this.state.open}
         onClose={this.closeModal}

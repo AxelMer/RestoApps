@@ -6,7 +6,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Button from '@material-ui/core/Button';
 import EditRoundedIcon from '@material-ui/icons/EditRounded';
 import AddIcon from '@material-ui/icons/Add';
-import { Table } from 'reactstrap';
+import { Table, Typography } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -16,7 +16,7 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import InputAdornment from '@material-ui/core/InputAdornment';
- 
+
 export default class Menu extends  React.Component{
   constructor(props){
     super(props);
@@ -84,7 +84,10 @@ export default class Menu extends  React.Component{
       .then(response=>{
         this.setState({lista:response.data})
       }).catch(error=>{
-        alert("No se puede conectar con el servidor" + error)
+        this.setState({
+          error:true,
+          message:'El servidor no responde '
+        })
       })
     }
   ///Metodos para Agregar nuevo producto  ****FUNCIONANDO****
@@ -232,32 +235,45 @@ render() {
               <hr/>
               </div>
               <div>
+                {this.state.error === true ?
+                  <Table className="table" size="small" aria-label="a dense table" >
+                    <thead>
+                      <tr>
+                      <Typography className="message" variant='overline'  disabled>{this.state.message}</Typography>
+                      </tr>
+                    </thead>
+                  </Table>
+                  :
                   <Table className="table" size="small" aria-label="a dense table" >
                     <thead>
                       <tr>
                         <th>Codigo</th>
-                        <th>Articulo</th>
-                        <th>Categoria</th>
-                        <th>Cantidad</th>
-                        <th>Precio</th>
+                        <th>Nombre</th>
+                        <th>Usuario</th>
+                        <th>Contraseña</th>
+                        <th>Permiso</th>
                         <th>Opciones</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      {this.renderList()}
-                    </tbody>
+                        <tbody>
+                        {this.renderList()}
+                        </tbody>
                   </Table>
+                }
+                  
               </div>
               <div>
-              <Button
-                  size="small" 
-                  variant="contained"
-                  color="primary"
-                  onClick={this.openModal}
-              >
-                <AddIcon/>
-                  Nueva cuenta
-              </Button>
+              {this.state.error === true ?
+                  <Button size="small" variant="contained" color="primary" onClick={this.openModal} disabled>
+                    <AddIcon/>
+                    Nueva Mesa
+                  </Button>               
+                  :
+                  <Button size="small" variant="contained" color="primary" onClick={this.openModal} >
+                    <AddIcon/>
+                    Nueva Mesa
+                  </Button>   
+                }
               <form>
           <Dialog open={this.state.open} onClose={this.closeModal}  disableBackdropClick aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
             {this.state.edit ?  

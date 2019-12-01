@@ -9,7 +9,7 @@ class MesaController extends Controller
 {
     public function __construct()
     {
-      //$this->middleware('client');
+      $this->middleware('auth:api', ['except' => ['login']]);
     }
     /**
      * Display a listing of the resource.
