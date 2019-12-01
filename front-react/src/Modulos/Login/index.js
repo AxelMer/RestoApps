@@ -28,13 +28,10 @@ export default class Login extends Component{
     this.setState({password: event.target.value})
   }
 sendLogin(){
-  var headers = { 
-    'Content-Type': 'application/json',
-    'X-Requested-With': 'XMLHttpRequest'
-   } 
-  axios.post('http://localhost:8000/login', headers)
+  axios.post('http://localhost:8000/api/auth/login')
   .then(response=>{
-    
+    localStorage.setItem('token', JSON.stringify(response.data));
+    this.props.history.push('/home');
   }).catch(error=>{
     alert("No se puede conectar con el servidor" + error)
   })
