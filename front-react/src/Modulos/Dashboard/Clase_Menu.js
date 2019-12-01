@@ -79,7 +79,7 @@ export default class Menu extends  React.Component{
   //Metodo para traer la los datos
     loadData = (e) =>{
 
-      axios.get('http://localhost:8000/productos',  { 
+      axios.get('http://localhost:8000/api/auth/productos',  { 
        })
       .then(response=>{
         this.setState({lista:response.data})
@@ -98,7 +98,7 @@ export default class Menu extends  React.Component{
           formData.append('precio',this.state.precio)
           formData.append('cantidad',this.state.cantidad)
   
-          axios.post(baseUrl+'/productos',formData).then(response=>{
+          axios.post(baseUrl+'/api/auth/productos',formData).then(response=>{
               if (response.data.success === true) {
                 alert(response.data.message)
                 // cargar datos de nuevo
@@ -178,7 +178,7 @@ export default class Menu extends  React.Component{
   sendDelete(){
     const baseUrl = 'http://localhost:8000/';
       //Todo el codigo para eliminar un user de la tabla 
-      axios.delete(baseUrl+'/productos/'+this.state.idProducto)
+      axios.delete(baseUrl+'/api/auth/productos/'+this.state.idProducto)
         .then(res => {
           this.loadData();
         })
@@ -304,7 +304,6 @@ render() {
                             id="precio" 
                             label="precio" 
                             type="text" 
-                            id="precio"
                             InputProps={{
                               startAdornment: <InputAdornment position="start">$</InputAdornment>,
                             }}
@@ -375,7 +374,6 @@ render() {
                             id="precio" 
                             label="precio" 
                             type="text" 
-                            id="precio"
                             startAdornment={<InputAdornment position="start">$</InputAdornment>}
                             value={this.state.precio}
                             onChange={this.cambiarPrecio}

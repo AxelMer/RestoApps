@@ -6,7 +6,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Button from '@material-ui/core/Button';
 import EditRoundedIcon from '@material-ui/icons/EditRounded';
 import AddIcon from '@material-ui/icons/Add';
-import { Table } from '@material-ui/core';
+import { Table, Typography } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -30,14 +30,14 @@ export default class Cuentas extends  React.Component{
       open:false,
       edit:false
     }
-    this.handleChangeId = this.handleChangeId.bind(this);
-    this.handleChangeUsuario = this.handleChangeUsuario.bind(this);
-    this.handleChangeNombre = this.handleChangeNombre.bind(this);
-    this.handleChangePassword  = this.handleChangePassword.bind(this);
-    this.handleChangeCredencial = this.handleChangeCredencial.bind(this);
-    this.openModal = this.openModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
-    this.changeEdit = this.changeEdit.bind(this);
+      this.handleChangeId = this.handleChangeId.bind(this);
+      this.handleChangeUsuario = this.handleChangeUsuario.bind(this);
+      this.handleChangeNombre = this.handleChangeNombre.bind(this);
+      this.handleChangePassword  = this.handleChangePassword.bind(this);
+      this.handleChangeCredencial = this.handleChangeCredencial.bind(this);
+      this.openModal = this.openModal.bind(this);
+      this.closeModal = this.closeModal.bind(this);
+      this.changeEdit = this.changeEdit.bind(this);
   }
 //Metodo para cargar despues que un componente se invoque
 componentDidMount(){
@@ -62,7 +62,10 @@ componentDidMount(){
 
   //Funciones de apertura y cierre del modal
   openModal() {
-    this.setState({ open: true });
+    this.setState({ 
+      open: true
+     });
+     
   }
   closeModal() {
     this.setState({ 
@@ -81,11 +84,16 @@ componentDidMount(){
 
 //Metodo para traer la los datos
   loadData = (e) =>{
-    axios.get('http://localhost:8000/user')
+    axios.get('http://localhost:8000/api/auth/user')
     .then(response=>{
       this.setState({lista:response.data})
     }).catch(error=>{
-      alert("Error "+error)
+      //alert("No se puede conectar con el servidor"+error)
+      this.setState({
+        error:true,
+        message:'El servidor no responde '
+      })
+
     })
   }
 ///Metodos para Agregar nuevo Usuario  ****FUNCIONANDO****
@@ -99,20 +107,19 @@ componentDidMount(){
         formData.append('password',this.state.password)
         formData.append('credencial',this.state.credencial)
 
-        axios.post(baseUrl+'/user',formData).then(response=>{
+        axios.post(baseUrl+'/api/auth/user',formData).then(response=>{
             if (response.data.success === true) {
               alert(response.data.message)
               // cargar datos de nuevo
               this.loadData();
-              this.setState
-              ({
+              this.setState({
                 idUser:'',
                 nombre:'',
                 usuario:'',
                 password:'',
                 credencial:'',
                 open: false
-              })
+              });
             }
 
         }).catch(error=>{
@@ -144,7 +151,7 @@ componentDidMount(){
   const baseUrl = 'http://localhost:8000/';
   const idU = this.state.idUser;
   console.log(idU)
-  axios.put(baseUrl+'/User/'+idU,formData).then(response=>{
+  axios.put(baseUrl+'/api/auth/user/'+idU,formData).then(response=>{
 
     if (response.data.success===true) {
       alert(response.data.message)
@@ -179,7 +186,7 @@ deleteUser(data){
 }
 sendDelete(){
   const baseUrl = 'http://localhost:8000/';
-    axios.delete(baseUrl+'/User/'+this.state.idUser)
+    axios.delete(baseUrl+'/api/auth/user/'+this.state.idUser)
       .then(res => {
         this.loadData();
       })
@@ -232,9 +239,18 @@ render() {
             <div>
               <div> 
                 <h1>Administrador de cuenta</h1>
-              <hr/>
+                <hr/>
               </div>
               <div>
+                {this.state.error === true ?
+                  <Table className="table" size="small" aria-label="a dense table" >
+                    <thead>
+                      <tr>
+                      <Typography className="message" variant='overline'  disabled>{this.state.message}</Typography>
+                      </tr>
+                    </thead>
+                  </Table>
+                  :
                   <Table className="table" size="small" aria-label="a dense table" >
                     <thead>
                       <tr>
@@ -246,146 +262,150 @@ render() {
                         <th>Opciones</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      {this.renderList()}
-                    </tbody>
+                        <tbody>
+                        {this.renderList()}
+                        </tbody>
                   </Table>
+                }
+                  
               </div>
               <div>
-              <Button
-                  size="small" 
-                  variant="contained"
-                  color="primary"
-                  onClick={this.openModal}
-              >
-                <AddIcon/>
-                  Nueva cuenta
-              </Button>
+                {this.state.error === true ?
+                  <Button size="small" variant="contained" color="primary" onClick={this.openModal} disabled>
+                    <AddIcon/>
+                    Nueva cuenta
+                  </Button>               
+                  :
+                  <Button size="small" variant="contained" color="primary" onClick={this.openModal} >
+                    <AddIcon/>
+                    Nueva cuenta
+                  </Button>   
+                }
               <form>
-          <Dialog open={this.state.open} onClose={this.closeModal}  disableBackdropClick aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
-            {this.state.edit ?  
-              <DialogContent>
-                <DialogTitle id="alert-dialog-title">Modificar datos</DialogTitle>
-                  <DialogContentText id="alert-dialog-description">
-                      Actualizar datos.
-                  </DialogContentText>
-                  <DialogContent>
-                          <TextField 
-                            autoFocus 
-                            margin="dense" 
-                            id="id" 
-                            label="id" 
-                            type="text" 
-                            value={this.state.idUser} 
-                            onChange={this.handleChangeId} 
-                            fullWidth
-                            disabled />
-                          <TextField 
-                            autoFocus 
-                            margin="dense" 
-                            id="nombre" 
-                            label="Nombre" 
-                            type="text" 
-                            value={this.state.nombre} 
-                            onChange={this.handleChangeNombre} 
-                            fullWidth />
-                          <TextField
-                            margin="dense"
-                            id="usuario"
-                            label="Usuario"
-                            type="text"
-                            value={this.state.usuario}
-                            onChange={this.handleChangeUsuario}
-                            fullWidth />
-                          <TextField
-                            margin="dense"
-                            id="password"
-                            label="Contraseña"
-                            type="password"
-                            value={this.state.password}
-                            onChange={this.handleChangePassword}
-                            fullWidth />
-                          <Select
-                            labelId="demo-simple-select-label"
-                            id="credencial"
-                            fullWidth
-                            value={this.state.credencial}
-                            onChange={this.handleChangeCredencial}
-                          >
-                            <MenuItem value={'admin'}>Administrador</MenuItem>
-                            <MenuItem value={'mozo'}>Mozo</MenuItem>
-                            <MenuItem value={'cocina'}>Cocina</MenuItem>
-                          </Select>
-                  </DialogContent>
-                  <DialogActions>
-                        <Button onClick={this.closeModal} color="primary">
-                          Cancel
-                        </Button>
-                        <Button onClick={this.sendUpdate} color="primary">
-                          Actualizar
-                        </Button>
-                      </DialogActions>
-              </DialogContent>
-            :  
-              <DialogContent>
-                  <DialogTitle id="alert-dialog-title">Crear Nuevo Usuario</DialogTitle>
-                    <DialogContentText id="alert-dialog-description">
-                      <DialogContent>
-                        Ingrese los datos del personal autorizado.
-                      </DialogContent>
-                      <DialogContent>
-                          <TextField 
-                            autoFocus 
-                            margin="dense" 
-                            id="nombre" 
-                            label="Nombre" 
-                            type="text" 
-                            value={this.state.nombre} 
-                            onChange={this.handleChangeNombre} 
-                            fullWidth />
-                          <TextField
-                            margin="dense"
-                            id="usuario"
-                            label="Usuario"
-                            type="text"
-                            value={this.state.usuario}
-                            onChange={this.handleChangeUsuario}
-                            fullWidth />
-                          <TextField
-                            margin="dense"
-                            id="password"
-                            label="Contraseña"
-                            type="password"
-                            value={this.state.password}
-                            onChange={this.handleChangePassword}
-                            fullWidth />
-                          <Select
-                            labelId="demo-simple-select-label"
-                            id="credencial"
-                            fullWidth
-                            value={this.state.credencial}
-                            onChange={this.handleChangeCredencial}
-                          >
-                            <MenuItem value={'admin'}>Administrador</MenuItem>
-                            <MenuItem value={'mozo'}>Mozo</MenuItem>
-                            <MenuItem value={'cocina'}>Cocina</MenuItem>
-                          </Select>
-                      </DialogContent>
-                      <DialogActions>
-                        <Button onClick={this.closeModal} color="primary">
-                          Cancel
-                        </Button>
-                        <Button onClick={this.addNewUser} color="primary">
-                          Guardar
-                        </Button>
-                      </DialogActions>
-                    </DialogContentText>
-              </DialogContent>
-            }
-          </Dialog>
-        </form>
+                <Dialog open={this.state.open} onClose={this.closeModal}  disableBackdropClick aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description">
+                  {this.state.edit ?  
+                    <DialogContent>
+                      <DialogTitle id="alert-dialog-title">Modificar datos</DialogTitle>
+                        <DialogContentText id="alert-dialog-description">
+                            Actualizar datos.
+                        </DialogContentText>
+                        <DialogContent>
+                                <TextField 
+                                  autoFocus 
+                                  margin="dense" 
+                                  id="id" 
+                                  label="id" 
+                                  type="text" 
+                                  value={this.state.idUser} 
+                                  onChange={this.handleChangeId} 
+                                  fullWidth
+                                  disabled />
+                                <TextField 
+                                  autoFocus 
+                                  margin="dense" 
+                                  id="nombre" 
+                                  label="Nombre" 
+                                  type="text" 
+                                  value={this.state.nombre} 
+                                  onChange={this.handleChangeNombre} 
+                                  fullWidth />
+                                <TextField
+                                  margin="dense"
+                                  id="usuario"
+                                  label="Usuario"
+                                  type="text"
+                                  value={this.state.usuario}
+                                  onChange={this.handleChangeUsuario}
+                                  fullWidth />
+                                <TextField
+                                  margin="dense"
+                                  id="password"
+                                  label="Contraseña"
+                                  type="password"
+                                  value={this.state.password}
+                                  onChange={this.handleChangePassword}
+                                  fullWidth />
+                                <Select
+                                  labelId="demo-simple-select-label"
+                                  id="credencial"
+                                  fullWidth
+                                  value={this.state.credencial}
+                                  onChange={this.handleChangeCredencial}
+                                >
+                                  <MenuItem value={'admin'}>Administrador</MenuItem>
+                                  <MenuItem value={'mozo'}>Mozo</MenuItem>
+                                  <MenuItem value={'cocina'}>Cocina</MenuItem>
+                                </Select>
+                        </DialogContent>
+                        <DialogActions>
+                              <Button onClick={this.closeModal} color="primary">
+                                Cancel
+                              </Button>
+                              <Button onClick={this.sendUpdate} color="primary">
+                                Actualizar
+                              </Button>
+                            </DialogActions>
+                    </DialogContent>
+                  :  
+                    <DialogContent>
+                        <DialogTitle id="alert-dialog-title">Crear Nuevo Usuario</DialogTitle>
+                          <DialogContentText id="alert-dialog-description">
+                            <DialogContent>
+                              Ingrese los datos del personal autorizado.
+                            </DialogContent>
+                            <DialogContent>
+                                <TextField 
+                                  autoFocus 
+                                  margin="dense" 
+                                  id="nombre" 
+                                  label="Nombre" 
+                                  type="text" 
+                                  value={this.state.nombre} 
+                                  onChange={this.handleChangeNombre} 
+                                  fullWidth />
+                                <TextField
+                                  margin="dense"
+                                  id="usuario"
+                                  label="Usuario"
+                                  type="text"
+                                  value={this.state.usuario}
+                                  onChange={this.handleChangeUsuario}
+                                  fullWidth />
+                                <TextField
+                                  margin="dense"
+                                  id="password"
+                                  label="Contraseña"
+                                  type="password"
+                                  value={this.state.password}
+                                  onChange={this.handleChangePassword}
+                                  fullWidth />
+                                <Select
+                                  labelId="demo-simple-select-label"
+                                  id="credencial"
+                                  fullWidth
+                                  value={this.state.credencial}
+                                  onChange={this.handleChangeCredencial}
+                                >
+                                  <MenuItem value={'admin'}>Administrador</MenuItem>
+                                  <MenuItem value={'mozo'}>Mozo</MenuItem>
+                                  <MenuItem value={'cocina'}>Cocina</MenuItem>
+                                </Select>
+                            </DialogContent>
+                            <DialogActions>
+                              <Button onClick={this.closeModal} color="primary">
+                                Cancel
+                              </Button>
+                              <Button onClick={this.addNewUser} color="primary">
+                                Guardar
+                              </Button>
+                            </DialogActions>
+                          </DialogContentText>
+                    </DialogContent>
+                  }
+                </Dialog>
+              </form>
             </div>
-        </div>
+            </div>
       </div>
   );
   }

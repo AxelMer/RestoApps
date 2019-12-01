@@ -8,6 +8,7 @@ import  Avatar from '@material-ui/core/Avatar';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
 import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 
 export default class Login extends Component{
   constructor(props){
@@ -27,6 +28,7 @@ export default class Login extends Component{
   cambiarPassword(event){
     this.setState({password: event.target.value})
   }
+<<<<<<< Updated upstream
 sendLogin(){
   axios.post('http://localhost:8000/api/auth/login')
   .then(response=>{
@@ -35,6 +37,26 @@ sendLogin(){
   }).catch(error=>{
     alert("No se puede conectar con el servidor" + error)
   })
+=======
+sendLogin = (e) =>{
+  e.preventDefault();
+  const baseUrl = 'http://localhost:8000/';
+    const formData = new FormData()
+    formData.append('usuario',this.state.usuario)
+    formData.append('password',this.state.password)
+
+    axios.post(baseUrl+'/api/auth/login',formData).then(response=>{
+      this.setState({
+          items:response.data,
+      })
+      localStorage.setItem('access_token', JSON.stringify(response.data));
+      this.props.history.push('/home');
+      console.log(localStorage)
+    }).catch(error=>{
+      alert("Error "+error)
+    })
+
+>>>>>>> Stashed changes
 }
 
 render() {
@@ -43,8 +65,8 @@ render() {
    <CssBaseline />
     <Container maxWidth="xs">
       <div>
-      <Grid container justify="center" alignItems="center">
-        <Avatar container justify="center" alignItems="center">
+      <Grid container justify='center' alignItems='center'>
+        <Avatar container justify='center' alignItems='center'>
           <FastfoodIcon />
         </Avatar>
       </Grid>
@@ -60,7 +82,7 @@ render() {
             margin="normal"
             required
             fullWidth
-            id="cuenta"
+            id="usuario"
             label="Cuenta de usuario"
             name="usuario"
             value={this.state.usuario} 

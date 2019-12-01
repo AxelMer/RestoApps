@@ -49,13 +49,13 @@ closeModal() {
 }
 
 loadData = (e) =>{
-        axios.get('http://localhost:8000/mesas')
+        axios.get('http://localhost:8000/api/auth/mesas')
         .then(response=>{
           this.setState({lista:response.data})
         }).catch(error=>{
           alert("No se puede conectar con el servidor" + error)
         });
-        axios.get('http://localhost:8000/productos')
+        axios.get('http://localhost:8000/api/auth/productos')
         .then(response=>{
           this.setState({listB:response.data})
         }).catch(error=>{
