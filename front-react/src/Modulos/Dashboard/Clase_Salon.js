@@ -41,7 +41,13 @@ handleChangeEstado(event){
 }
 //Metodo para traer la los datos
 loadData = (e) =>{
-  axios.get('http://localhost:8000/api/auth/mesas')
+  const token = localStorage.getItem("access_token");
+    axios.get('http://localhost:8000/api/auth/mesas',{
+      headers: {
+        Authorization: 'Bearer '+token,
+        'Content-Type': 'application/json'
+      }
+    })
   .then(response=>{
     this.setState({lista:response.data})
   }).catch(error=>{
@@ -55,10 +61,16 @@ loadData = (e) =>{
 addMesa=(e)=>{
   e.preventDefault();
     const baseUrl = 'http://localhost:8000/';
+    const token = localStorage.getItem("access_token");
     const formData = new FormData()
       formData.append('capacidad',this.state.capacidad)
 
-      axios.post(baseUrl+'/api/auth/mesas',formData).then(response=>{
+      axios.post(baseUrl+'/api/auth/mesas',formData,{
+        headers: {
+          Authorization: 'Bearer '+token,
+          'Content-Type': 'application/json',
+          }
+        }).then(response=>{
           if (response.data.success === true) {
             alert(response.data.message)
             // cargar datos de nuevo
@@ -69,7 +81,6 @@ addMesa=(e)=>{
               open: false
             })
           }
-
       }).catch(error=>{
         alert("Error "+error)
       })
@@ -128,11 +139,8 @@ render() {
                     <thead>
                       <tr>
                         <th>Codigo</th>
-                        <th>Nombre</th>
-                        <th>Usuario</th>
-                        <th>Contraseña</th>
-                        <th>Permiso</th>
-                        <th>Opciones</th>
+                        <th>Capacidad</th>
+                        <th>Estado</th>
                       </tr>
                     </thead>
                         <tbody>
@@ -145,14 +153,14 @@ render() {
               <div>
               {this.state.error === true ?
                   <Button size="small" variant="contained" color="primary" onClick={this.openModal} disabled>
-                    <AddIcon/>
-                    Agregar Producto
-                  </Button>               
-                  :
-                  <Button size="small" variant="contained" color="primary" onClick={this.openModal} >
-                    <AddIcon/>
-                    Agregar Producto
-                  </Button>   
+                  <AddIcon/>
+                  Nueva Mesa
+                </Button>               
+                :
+                <Button size="small" variant="contained" color="primary" onClick={this.openModal} >
+                  <AddIcon/>
+                  Nueva Mesa
+                </Button>   
                 }
       <Dialog
         open={this.state.open}

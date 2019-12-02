@@ -49,43 +49,32 @@ closeModal() {
 }
 
 loadData = (e) =>{
-        axios.get('http://localhost:8000/api/auth/mesas')
-        .then(response=>{
+    const token = localStorage.getItem("access_token");
+    axios.get('http://localhost:8000/api/auth/mesas',{
+      headers: {
+        Authorization: 'Bearer '+token,
+        'Content-Type': 'application/json'
+      }
+    }).then(response=>{
           this.setState({lista:response.data})
+          const token = localStorage.getItem("access_token");
+          axios.get('http://localhost:8000/api/auth/productos',{
+            headers: {
+              Authorization: 'Bearer '+token,
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(response=>{
+            this.setState({listB:response.data})
+          }).catch(error=>{
+            alert("No se puede conectar con el servidor" + error)
+          })
         }).catch(error=>{
           alert("No se puede conectar con el servidor" + error)
         });
-        axios.get('http://localhost:8000/api/auth/productos')
-        .then(response=>{
-          this.setState({listB:response.data})
-        }).catch(error=>{
-          alert("No se puede conectar con el servidor" + error)
-        })
-
 }
 sendPedidos(){
 
-}
-listTable(){
-            return this.state.listB.map((data)=>{
-                    return(
-                        <tr key={data.id}> 
-                            <td>
-                            <ListItem role="listitem" button >
-                                <ListItemIcon>
-                                    <Checkbox
-                                    disableRipple
-                                    />
-                                </ListItemIcon>
-                                <ListItemText  primary={data.articulo} />
-                                </ListItem>
-                            </td>
-                            <td><ListItemText id={data.id} primary={data.categoria} /></td>
-                            <td>${data.precio}</td>
-                            <td ><Input id="precio" variant="outlined" aria-describedby="outlined-weight-helper-text" /></td>
-                        </tr>
-                        )
-            })
 }
 
 dataMesa=(data)=>{

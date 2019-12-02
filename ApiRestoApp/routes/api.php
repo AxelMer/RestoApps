@@ -21,8 +21,8 @@ Route::group([
 ], function ($router) {
 
     Route::post('login', 'AuthController@login');
-    Route::apiResource('user', 'UserController');
     Route::post('logout', 'AuthController@logout');
+    Route::apiResource('user', 'UserController');
     Route::apiResource('productos', 'ProductoController');
     Route::apiResource('pedidos', 'PedidoController');
     Route::apiResource('mesas', 'MesaController');
