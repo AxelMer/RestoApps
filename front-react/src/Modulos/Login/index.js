@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
 import '../../App.css';
 import Button from '@material-ui/core/Button';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import InputAdornment from '@material-ui/core/InputAdornment';
+
 import Typography from '@material-ui/core/Typography';
-import {FormGroup, Col} from 'reactstrap';
+import{ Col } from 'reactstrap';
 import TextField from '@material-ui/core/TextField';
 import  Avatar from '@material-ui/core/Avatar';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
 import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import LockIcon from '@material-ui/icons/Lock';
+
 export default class Login extends Component{
   constructor(props){
     super(props);

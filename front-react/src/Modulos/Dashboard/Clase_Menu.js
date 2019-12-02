@@ -78,9 +78,13 @@ export default class Menu extends  React.Component{
   
   //Metodo para traer la los datos
     loadData = (e) =>{
-
-      axios.get('http://localhost:8000/api/auth/productos',  { 
-       })
+      const token = localStorage.getItem("access_token");
+      axios.get('http://localhost:8000/api/auth/productos',{
+        headers: {
+          Authorization: 'Bearer '+token,
+          'Content-Type': 'application/json'
+        }
+      })
       .then(response=>{
         this.setState({lista:response.data})
       }).catch(error=>{
@@ -94,14 +98,19 @@ export default class Menu extends  React.Component{
     addProduct=(e)=>{
       e.preventDefault();
         const baseUrl = 'http://localhost:8000/';
-  
+        const token = localStorage.getItem("access_token");
         const formData = new FormData()
           formData.append('articulo',this.state.articulo)
           formData.append('categoria',this.state.categoria)
           formData.append('precio',this.state.precio)
           formData.append('cantidad',this.state.cantidad)
   
-          axios.post(baseUrl+'/api/auth/productos',formData).then(response=>{
+          axios.post(baseUrl+'/api/auth/productos',formData,{
+            headers: {
+              Authorization: 'Bearer '+token,
+              'Content-Type': 'application/json',
+            }
+          }).then(response=>{
               if (response.data.success === true) {
                 alert(response.data.message)
                 // cargar datos de nuevo
@@ -248,10 +257,10 @@ render() {
                     <thead>
                       <tr>
                         <th>Codigo</th>
-                        <th>Nombre</th>
-                        <th>Usuario</th>
-                        <th>Contraseña</th>
-                        <th>Permiso</th>
+                        <th>Articulo</th>
+                        <th>Categoria</th>
+                        <th>Stock</th>
+                        <th>Precio</th>
                         <th>Opciones</th>
                       </tr>
                     </thead>
@@ -266,12 +275,12 @@ render() {
               {this.state.error === true ?
                   <Button size="small" variant="contained" color="primary" onClick={this.openModal} disabled>
                     <AddIcon/>
-                    Nueva Mesa
+                    Agregar Producto
                   </Button>               
                   :
                   <Button size="small" variant="contained" color="primary" onClick={this.openModal} >
                     <AddIcon/>
-                    Nueva Mesa
+                    Agregar Producto
                   </Button>   
                 }
               <form>

@@ -11,7 +11,7 @@ class UserController extends Controller
 {
   public function __construct()
   {
-    $this->middleware('auth:api', ['except' => ['login']]);
+    $this->middleware('auth:api', ['except' => ['user']]);
   }
 
     /**
@@ -21,7 +21,7 @@ class UserController extends Controller
      */
     public function index()
     {
-
+        
         return User::all();
 
     }
@@ -36,7 +36,7 @@ class UserController extends Controller
         User::create([
             'nombre' => $request->input('nombre'),
             'usuario' => $request->input('usuario'),
-            'password' =>  Hash::make($request->input('password')) ,
+            'password' =>  \Hash::make($request->input('password')) ,
             'credencial' => $request->input('credencial')
           ]);
     
@@ -64,13 +64,14 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id){
-      $input = $request->all();
-      $user = User::findorfail($id);
-      $updateNow = $user->update($input);
-      $response['message'] = "Se han actualizado los datos";
-      $response['success'] = true;
 
-      return $response;
+      $userData = $request->only(["nombre","usuario","password","credencial"]);
+      $userData['password'] = Hash::make($userData['password']);
+      User::find($id)->update($userData);
+        $response['message'] = "Se han actualizado los datos";
+        $response['success'] = true;
+
+        return $response;
     }
 
     /**

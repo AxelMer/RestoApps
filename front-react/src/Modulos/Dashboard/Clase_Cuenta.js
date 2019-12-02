@@ -59,7 +59,6 @@ componentDidMount(){
   handleChangeId(event){
     this.setState({idUser:event.target.value})
   }
-
   //Funciones de apertura y cierre del modal
   openModal() {
     this.setState({ 
@@ -94,7 +93,6 @@ componentDidMount(){
     .then(response=>{
       this.setState({lista:response.data})
     }).catch(error=>{
-      //alert("No se puede conectar con el servidor"+error)
       this.setState({
         error:true,
         message:'El servidor no responde '
@@ -113,11 +111,11 @@ componentDidMount(){
         formData.append('password',this.state.password)
         formData.append('credencial',this.state.credencial)
 
-        axios.post(baseUrl+'/api/auth/user',{
+        axios.post(baseUrl+'/api/auth/user',formData,{
           headers: {
             Authorization: 'Bearer '+token,
-            'Content-Type': 'application/json'
-          },formData
+            'Content-Type': 'application/json',
+          }
         }).then(response=>{
             if (response.data.success === true) {
               alert(response.data.message)
@@ -144,13 +142,13 @@ componentDidMount(){
         idUser: data.id,
         nombre: data.nombre,
         usuario: data.usuario,
-        password: data.password,
         credencial: data.credencial,
         open:true,
         edit:true
       })
   }
   sendUpdate=(e)=>{
+  const token = localStorage.getItem("access_token");
   const formData = {
   id: this.state.idUser,
   nombre: this.state.nombre,
@@ -158,28 +156,30 @@ componentDidMount(){
   password: this.state.password,
   credencial: this.state.credencial,
   }
-  const baseUrl = 'http://localhost:8000/';
   const idU = this.state.idUser;
-  console.log(idU)
-  axios.put(baseUrl+'/api/auth/user/'+idU,formData).then(response=>{
-
-    if (response.data.success===true) {
-      alert(response.data.message)
-      // para cargar datos de nuevo
-      this.loadData();
-      this.setState({
-        open: false,
-        idUser:'',
-        nombre:'',
-        usuario:'',
-        password:'',
-        credencial:'',
-      })
+  axios.put('http://localhost:8000/api/auth/user/'+idU,formData,{
+    headers: {
+      Authorization: 'Bearer '+token,
+      'Content-Type': 'application/json'
     }
-
-  }).catch(error=>{
-    alert("Error 456"+error)
   })
+    .then(response=>{
+        if (response.data.success===true) {
+          alert(response.data.message)
+          // para cargar datos de nuevo
+          this.loadData();
+          this.setState({
+            open: false,
+            idUser:'',
+            nombre:'',
+            usuario:'',
+            password:'',
+            credencial:'',
+          })
+        }
+      }).catch(error=>{
+        alert("Error 456"+error)
+      })
 
   }
 
@@ -195,14 +195,18 @@ deleteUser(data){
   })
 }
 sendDelete(){
+  const token = localStorage.getItem("access_token");
   const baseUrl = 'http://localhost:8000/';
-    axios.delete(baseUrl+'/api/auth/user/'+this.state.idUser)
+    axios.delete(baseUrl+'api/auth/user/'+this.state.idUser,{
+      headers: {
+        Authorization: 'Bearer '+token,
+        'Content-Type': 'application/json'
+      }
+    })
       .then(res => {
         this.loadData();
       })
       .catch(error=>{
-        console.log(error);
-        console.log(error.data);
         alert("Error 456"+error)
       })
 }
@@ -325,14 +329,6 @@ render() {
                                   value={this.state.usuario}
                                   onChange={this.handleChangeUsuario}
                                   fullWidth />
-                                <TextField
-                                  margin="dense"
-                                  id="password"
-                                  label="Contraseña"
-                                  type="password"
-                                  value={this.state.password}
-                                  onChange={this.handleChangePassword}
-                                  fullWidth />
                                 <Select
                                   labelId="demo-simple-select-label"
                                   id="credencial"
@@ -340,10 +336,19 @@ render() {
                                   value={this.state.credencial}
                                   onChange={this.handleChangeCredencial}
                                 >
-                                  <MenuItem value={'admin'}>Administrador</MenuItem>
+                                  <MenuItem value={'administrador'}>Administrador</MenuItem>
                                   <MenuItem value={'mozo'}>Mozo</MenuItem>
-                                  <MenuItem value={'cocina'}>Cocina</MenuItem>
                                 </Select>
+                                <DialogContent>
+                                <TextField
+                                  margin="dense"
+                                  id="password"
+                                  label="Nueva Contraseña"
+                                  type="password"
+                                  value={this.state.password}
+                                  onChange={this.handleChangePassword}
+                                  fullWidth />
+                                </DialogContent>
                         </DialogContent>
                         <DialogActions>
                               <Button onClick={this.closeModal} color="primary">
@@ -394,9 +399,8 @@ render() {
                                   value={this.state.credencial}
                                   onChange={this.handleChangeCredencial}
                                 >
-                                  <MenuItem value={'admin'}>Administrador</MenuItem>
+                                  <MenuItem value={'administrador'}>Administrador</MenuItem>
                                   <MenuItem value={'mozo'}>Mozo</MenuItem>
-                                  <MenuItem value={'cocina'}>Cocina</MenuItem>
                                 </Select>
                             </DialogContent>
                             <DialogActions>
