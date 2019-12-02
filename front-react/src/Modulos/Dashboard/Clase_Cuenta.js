@@ -41,7 +41,13 @@ export default class Cuentas extends  React.Component{
   }
 //Metodo para cargar despues que un componente se invoque
 componentDidMount(){
-  this.loadData()
+  setTimeout(
+    function() {
+      this.loadData()
+    }
+    .bind(this),
+    1000
+);
 }
   //
   handleChangeUsuario(event){
