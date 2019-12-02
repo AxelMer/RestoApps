@@ -32,9 +32,7 @@ class User extends Authenticatable implements JWTSubject
      *
      * @var array
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+
     public function getJWTIdentifier()
     {
         return $this->getKey();

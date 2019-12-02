@@ -28,7 +28,7 @@ export default class Cuentas extends  React.Component{
       password:'',
       credencial:'',
       open:false,
-      edit:false
+      edit:false,
     }
       this.handleChangeId = this.handleChangeId.bind(this);
       this.handleChangeUsuario = this.handleChangeUsuario.bind(this);
@@ -84,7 +84,13 @@ componentDidMount(){
 
 //Metodo para traer la los datos
   loadData = (e) =>{
-    axios.get('http://localhost:8000/api/auth/user')
+    const token = localStorage.getItem("access_token");
+    axios.get('http://localhost:8000/api/auth/user',{
+      headers: {
+        Authorization: 'Bearer '+token,
+        'Content-Type': 'application/json'
+      }
+    })
     .then(response=>{
       this.setState({lista:response.data})
     }).catch(error=>{
@@ -97,17 +103,22 @@ componentDidMount(){
     })
   }
 ///Metodos para Agregar nuevo Usuario  ****FUNCIONANDO****
-  addNewUser=(e)=>{
+  addNewUser = (e) =>{
     e.preventDefault();
       const baseUrl = 'http://localhost:8000/';
-
+      const token = localStorage.getItem("access_token");
       const formData = new FormData()
         formData.append('nombre',this.state.nombre)
         formData.append('usuario',this.state.usuario)
         formData.append('password',this.state.password)
         formData.append('credencial',this.state.credencial)
 
-        axios.post(baseUrl+'/api/auth/user',formData).then(response=>{
+        axios.post(baseUrl+'/api/auth/user',{
+          headers: {
+            Authorization: 'Bearer '+token,
+            'Content-Type': 'application/json'
+          },formData
+        }).then(response=>{
             if (response.data.success === true) {
               alert(response.data.message)
               // cargar datos de nuevo
@@ -121,7 +132,6 @@ componentDidMount(){
                 open: false
               });
             }
-
         }).catch(error=>{
           alert("Error "+error)
         })
@@ -205,7 +215,6 @@ renderList(){
         <td>{data.id}</td>
         <td>{data.nombre}</td>
         <td>{data.usuario}</td>
-        <td>{data.password}</td>
         <td>{data.credencial}</td>
         <td>
         <Button
@@ -257,7 +266,6 @@ render() {
                         <th>Codigo</th>
                         <th>Nombre</th>
                         <th>Usuario</th>
-                        <th>Contraseña</th>
                         <th>Permiso</th>
                         <th>Opciones</th>
                       </tr>

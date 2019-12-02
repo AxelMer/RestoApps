@@ -21,7 +21,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        
+
         return User::all();
 
     }
@@ -36,7 +36,7 @@ class UserController extends Controller
         User::create([
             'nombre' => $request->input('nombre'),
             'usuario' => $request->input('usuario'),
-            'password' =>  \Hash::make($request->input('password')) ,
+            'password' =>  Hash::make($request->input('password')) ,
             'credencial' => $request->input('credencial')
           ]);
     
