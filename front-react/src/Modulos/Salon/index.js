@@ -22,19 +22,34 @@ constructor(props){
           estado:'',
           open:false,
         }
-        //this.handleChangeEstado  = this.handleChangeEstado.bind(this);
+        this.handleChangeEstado  = this.handleChangeEstado.bind(this);
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
 }
+handleChangeEstado(event){
+  this.setState({estado: event.target.value})
+}
 componentDidMount(){
-        this.loadData()
+  setTimeout(
+    function() {
+      this.loadData()
+    }
+    .bind(this),
+    1000
+);
 }
 openModal() {
     this.setState({ 
         open: true });   
 }
 closeModal() {
-    this.setState({ open: false });
+    this.setState({ 
+      idMesa:'',
+      lista:[],
+      capacidad:'',
+      estado:'',
+      open:false,
+    });
 }
 
 loadData = (e) =>{
@@ -54,17 +69,19 @@ dataMesa=(data)=>{
     this.setState({
       idMesa: data.id,
       estado: data.estado,
-      capacidad:data.capacidad,
+      capacidad: data.capacidad,
       open:true,
     })
 }
 updateEstado = (e) =>{
+  e.preventDefault();
+if(this.state.estado === 1){
   const token = localStorage.getItem("access_token");
   const formData = {
-  id: this.state.idMesa,
-  capacidad: this.state.capacidad,
-  estado: this.state.estado,
-  }
+    id: this.state.idMesa,
+    capacidad:this.state.capacidad,
+    estado: 0,
+    }
   const idM = this.state.idMesa;
   axios.put('http://localhost:8000/api/auth/mesas/'+idM,formData,{
     headers: {
@@ -74,10 +91,10 @@ updateEstado = (e) =>{
   })
     .then(response=>{
         if (response.data.success===true) {
+          alert(response.data.message)
           this.loadData();
           this.setState({
             idMesa:'',
-            lista:[],
             capacidad:'',
             estado:'',
             open:false,
@@ -86,14 +103,44 @@ updateEstado = (e) =>{
       }).catch(error=>{
         alert("Error 456"+error)
       })
+}else{
+  const token = localStorage.getItem("access_token");
+  const formData = {
+    id: this.state.idMesa,
+    capacidad:this.state.capacidad,
+    estado: 1,
     }
+  const idM = this.state.idMesa;
+  axios.put('http://localhost:8000/api/auth/mesas/'+idM,formData,{
+    headers: {
+      Authorization: 'Bearer '+token,
+      'Content-Type': 'application/json'
+    }
+  })
+    .then(response=>{
+        if (response.data.success===true) {
+          alert(response.data.message)
+          this.loadData();
+          this.setState({
+            idMesa:'',
+            capacidad:'',
+            estado:'',
+            open:false,
+          })
+        }
+      }).catch(error=>{
+        alert("Error 456"+error)
+      })
+
+}
+}
 renderList(){
     return this.state.lista.map((data)=>{
         return(
             <Grid item xs={2} zeroMinWidth>
                 <Paper>
                     {data.estado === 1 ? 
-                        <Tooltip title="Add" placement="top">
+                        <Tooltip title={data.id} placement="top">
                             <Button onClick={()=>this.dataMesa(data)}>
                                 <DeckIcon className="r" fontSize="large" /> 
                             </Button>
@@ -139,13 +186,11 @@ render(){
                                     </div>
                                           {this.state.estado === 1 ? 
                                             <Grid>
-                                              <Button id="0"  value="0" variant="contained" color="primary" >Liberar Mesa</Button><br/>
-                                              <Button id="1"  value="1" variant="contained" color="primary" disabled>Ocupar Mesa</Button>
+                                              <Button variant="contained" color="primary" onClick={this.updateEstado} onClose={this.closeModal}>Liberar Mesa</Button><br/>
                                             </Grid>
                                           :
                                             <Grid>
-                                              <Button id="0"  value="0" variant="contained" color="primary" disabled>Liberar Mesa</Button><br/>
-                                              <Button id="1"  value="1" variant="contained" color="primary" onClick={this.updateEstado} >Ocupar Mesa</Button>
+                                              <Button variant="contained" color="primary" onClick={this.updateEstado} onClose={this.closeModal}>Ocupar Mesa</Button>
                                             </Grid>
                                           }
 
