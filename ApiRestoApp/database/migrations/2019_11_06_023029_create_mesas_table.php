@@ -17,7 +17,7 @@ class CreateMesasTable extends Migration
             $table->engine = 'InnoDB';
             $table->Increments('id');
             $table->smallInteger('capacidad');
-            $table->boolean('estado')->default(false);
+            $table->smallInteger('estado');
             $table->timestamps();
         });
     }

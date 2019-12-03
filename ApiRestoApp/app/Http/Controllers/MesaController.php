@@ -29,8 +29,10 @@ class MesaController extends Controller
      */
     public function store(Request $request)
     {
+        $state = 0;
         Mesa::create([
             'capacidad' => $request->input('capacidad'),
+            'estado' => $state
           ]);
     
           $response['message'] = "Guardo exitosamente";
@@ -57,9 +59,15 @@ class MesaController extends Controller
      * @param  \App\Mesa  $mesa
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Mesa $mesa)
+    public function update(Request $request, $id)
     {
-        //
+        $input = $request->all();
+        $product = Mesa::findorfail($id);
+        $updateNow = $product->update($input);
+        $response['message'] = "Se han actualizado los datos";
+        $response['success'] = true;
+  
+        return $response;
     }
 
     /**
@@ -71,5 +79,9 @@ class MesaController extends Controller
     public function destroy(Mesa $mesa)
     {
         //
+    }
+    public function mesas(Request $request)
+    {
+        return response()->json($request->mesas());
     }
 }
