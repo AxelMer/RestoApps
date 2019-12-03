@@ -39,7 +39,21 @@ export default class Menu extends  React.Component{
     this.closeModal = this.closeModal.bind(this);
     this.changeEdit = this.changeEdit.bind(this);
   }
-    componentDidMount(){
+  UNSAFE_componentWillMount(){
+    if(localStorage.length === 0){
+      alert("Area Restringida");
+        this.props.history.push('/');
+    }else{
+      setTimeout(
+        function() {
+          this.loadData()
+        }
+        .bind(this),
+        100
+    );
+    }
+  }
+  /*  componentDidMount(){
       setTimeout(
         function() {
           this.loadData()
@@ -47,7 +61,7 @@ export default class Menu extends  React.Component{
         .bind(this),
         1000
     );
-    }
+    }*/
     //
     cambiarArticulo(event){
       this.setState({articulo: event.target.value})
