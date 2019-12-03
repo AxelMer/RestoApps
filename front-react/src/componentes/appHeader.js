@@ -44,12 +44,12 @@ export default function ClippedDrawer() {
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-        <Typography variant="h5" component="span" noWrap>
+        <Typography variant="h5" component="span" >
           Resto APP
           </Typography>
-          <Typography variant="h6" component="span" noWrap className={classes.title}>
+          <Typography variant="h6" component="span"  className={classes.title}>
           </Typography>
-          <Button className={classes.button} variant="contained"noWrap component="span" >
+          <Button className={classes.button} variant="contained" component="span" >
             Cerrar Sesion 
           </Button>
         </Toolbar>

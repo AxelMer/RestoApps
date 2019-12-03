@@ -18,11 +18,9 @@ constructor(props){
         this.state = {
           idMesa:'',
           lista:[],
-          listB:[],
           capacidad:'',
           estado:'',
           open:false,
-          boton:''
         }
         //this.handleChangeEstado  = this.handleChangeEstado.bind(this);
         this.openModal = this.openModal.bind(this);
@@ -30,9 +28,6 @@ constructor(props){
 }
 componentDidMount(){
         this.loadData()
-}
-cambiarBoton(event){
-    this.setState({boton: event.target.value})
 }
 openModal() {
     this.setState({ 
@@ -51,18 +46,6 @@ loadData = (e) =>{
       }
     }).then(response=>{
           this.setState({lista:response.data})
-          const token = localStorage.getItem("access_token");
-          axios.get('http://localhost:8000/api/auth/productos',{
-            headers: {
-              Authorization: 'Bearer '+token,
-              'Content-Type': 'application/json'
-            }
-          })
-          .then(response=>{
-            this.setState({listB:response.data})
-          }).catch(error=>{
-            alert("No se puede conectar con el servidor" + error)
-          })
         }).catch(error=>{
           alert("No se puede conectar con el servidor" + error)
         });
@@ -79,10 +62,11 @@ updateEstado = (e) =>{
   const token = localStorage.getItem("access_token");
   const formData = {
   id: this.state.idMesa,
+  capacidad: this.state.capacidad,
   estado: this.state.estado,
   }
-  const idU = this.state.idUser;
-  axios.put('http://localhost:8000/api/auth/user/'+idU,formData,{
+  const idM = this.state.idMesa;
+  axios.put('http://localhost:8000/api/auth/mesas/'+idM,formData,{
     headers: {
       Authorization: 'Bearer '+token,
       'Content-Type': 'application/json'
@@ -90,16 +74,13 @@ updateEstado = (e) =>{
   })
     .then(response=>{
         if (response.data.success===true) {
-          alert(response.data.message)
-          // para cargar datos de nuevo
           this.loadData();
           this.setState({
-            open: false,
-            idUser:'',
-            nombre:'',
-            usuario:'',
-            password:'',
-            credencial:'',
+            idMesa:'',
+            lista:[],
+            capacidad:'',
+            estado:'',
+            open:false,
           })
         }
       }).catch(error=>{
@@ -118,9 +99,11 @@ renderList(){
                             </Button>
                         </Tooltip>      
                     :
-                    <Tooltip title={data.id} placement="top">
-                    <Button onClick={()=>this.dataMesa(data)}><DeckIcon className="v" fontSize="large" /> </Button>
-                </Tooltip>  
+                        <Tooltip title={data.id} placement="top">
+                          <Button onClick={()=>this.dataMesa(data)}>
+                            <DeckIcon className="v" fontSize="large" />
+                          </Button>
+                        </Tooltip>  
                 }<hr/>  
                     <i><PeopleIcon fontSize="small"/>
                         <Typography>{data.capacidad}</Typography></i>
@@ -144,16 +127,28 @@ render(){
                               <DialogContent>
                                   <div>
                                     <div>
-                                      <div>
-                                        <i><DeckIcon className="v" fontSize="medium" />{this.state.idMesa}</i>
-                                      </div>
-                                      <div>
-                                        <i><PeopleIcon fontSize="small"/>{this.state.capacidad}</i>
-                                      </div>
+                                    <Grid container spacing={4}>
+                                      <Grid item xs>
+                                      <i><DeckIcon fontSize="small" />{this.state.idMesa}</i>
+                                      </Grid>
+                                      <Grid item xs>
+                                      <i><PeopleIcon fontSize="small"/>{this.state.capacidad}</i>
+                                      </Grid>
+                                    </Grid>
+                                      <hr/>
                                     </div>
-                                        <Grid>
-                                        <Button variant="contained" color="primary" >Ocupar Mesa</Button>
-                                        </Grid>
+                                          {this.state.estado === 1 ? 
+                                            <Grid>
+                                              <Button id="0"  value="0" variant="contained" color="primary" >Liberar Mesa</Button><br/>
+                                              <Button id="1"  value="1" variant="contained" color="primary" disabled>Ocupar Mesa</Button>
+                                            </Grid>
+                                          :
+                                            <Grid>
+                                              <Button id="0"  value="0" variant="contained" color="primary" disabled>Liberar Mesa</Button><br/>
+                                              <Button id="1"  value="1" variant="contained" color="primary" onClick={this.updateEstado} >Ocupar Mesa</Button>
+                                            </Grid>
+                                          }
+
                                   </div>
                               </DialogContent>
                           </Dialog>
