@@ -62,8 +62,23 @@
   margin-top:-150px;
   border:1px solid #808080;
   padding:5px;
+  -webkit-border-radius: 7px;
+-moz-border-radius: 7px;
+-webkit-box-shadow: 0px 2px 11px -2px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px 2px 11px -2px rgba(0,0,0,0.75);
+box-shadow: 0px 2px 11px -2px rgba(0,0,0,0.75);
+-webkit-box-shadow: inset 0px 2px 11px -2px rgba(0,0,0,0.75);
+-moz-box-shadow: inset 0px 2px 11px -2px rgba(0,0,0,0.75);
+box-shadow: inset 0px 2px 11px -2px rgba(0,0,0,0.75);
+border-radius: 7px;
 }
-
+.sesion{
+  position: absolute;
+  display: inline-block;
+  margin-top: 5px;
+  margin-left: 20%;
+  margin-bottom: 40%;
+}
 .login{
   position: absolute;
   /*nos posicionamos en el centro del navegador*/
@@ -90,10 +105,7 @@ border-radius: 7px;
   padding:5px;
   background: linear-gradient(0deg, rgba(217,217,217,1) 0%, rgba(215,233,236,1) 100%);
 }
-.input-area{
- 
 
-}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

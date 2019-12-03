@@ -10,7 +10,8 @@ import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-
+import Fab from '@material-ui/core/Fab';
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 
 export default class Salon extends React.Component{
 constructor(props){
@@ -51,7 +52,6 @@ closeModal() {
       open:false,
     });
 }
-
 loadData = (e) =>{
     const token = localStorage.getItem("access_token");
     axios.get('http://localhost:8000/api/auth/mesas',{
@@ -62,7 +62,8 @@ loadData = (e) =>{
     }).then(response=>{
           this.setState({lista:response.data})
         }).catch(error=>{
-          alert("No se puede conectar con el servidor" + error)
+          alert("Area Restringida")
+          this.props.history.push('/');
         });
 }
 dataMesa=(data)=>{
@@ -160,7 +161,23 @@ renderList(){
         )
       })
 }
-
+cerrarSesion = (e) =>{
+  const token = localStorage.getItem("access_token");
+  axios.post('http://localhost:8000/api/auth/logout',token,{
+    headers: {
+      Authorization: 'Bearer '+token,
+      'Content-Type': 'application/json'
+    }
+  })
+    .then(response=>{
+        if (response.data.success===true) {
+          alert(response.data.message)
+          this.props.history.push('/');
+        }
+      }).catch(error=>{
+        alert("Error 456" + error)
+      })
+}
 render(){
         return(
             <div>
@@ -168,6 +185,11 @@ render(){
                     <Grid container item xs={12} spacing={1}>
                         {this.renderList()}
                     </Grid>
+                </Grid>
+                <Grid className='sesion'>
+                <Fab color="primary" size="small" aria-label="add" onClick={this.cerrarSesion}>
+                  <PowerSettingsNewIcon fontSize="small"  />
+                </Fab>
                 </Grid>
                   <form>
                           <Dialog open={this.state.open} onClose={this.closeModal} maxWidth="xl"  aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description"> 

@@ -46,7 +46,7 @@ componentDidMount(){
       this.loadData()
     }
     .bind(this),
-    1000
+    100
 );
 }
   //
