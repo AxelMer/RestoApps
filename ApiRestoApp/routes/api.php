@@ -24,7 +24,6 @@ Route::group([
     Route::post('logout', 'AuthController@logout');
     Route::apiResource('user', 'UserController');
     Route::apiResource('productos', 'ProductoController');
-    Route::apiResource('pedidos', 'PedidoController');
     Route::apiResource('mesas', 'MesaController');
 
 });

@@ -30,7 +30,13 @@ export default class Salon extends  React.Component{
   }
 
 componentDidMount(){
-    this.loadData()
+  setTimeout(
+    function() {
+      this.loadData()
+    }
+    .bind(this),
+    1000
+);
 }
 //Los cambios de los inputs
 handleChangeCapacidad(event){

@@ -40,7 +40,13 @@ export default class Menu extends  React.Component{
     this.changeEdit = this.changeEdit.bind(this);
   }
     componentDidMount(){
-      this.loadData()
+      setTimeout(
+        function() {
+          this.loadData()
+        }
+        .bind(this),
+        1000
+    );
     }
     //
     cambiarArticulo(event){
@@ -144,6 +150,7 @@ export default class Menu extends  React.Component{
         })
     }
     sendUpdate=(e)=>{
+      const token = localStorage.getItem("access_token");
     const formData = {
       id: this.state.idProducto,
       articulo: this.state.articulo,
@@ -151,10 +158,13 @@ export default class Menu extends  React.Component{
       cantidad: this.state.cantidad,
       precio: this.state.precio,
     }
-    const baseUrl = 'http://localhost:8000/';
     const idU = this.state.idProducto;
-    console.log(idU)
-    axios.put(baseUrl+'/productos/'+idU,formData).then(response=>{
+    axios.put('http://localhost:8000/api/auth/productos/'+idU,formData,{
+    headers: {
+      Authorization: 'Bearer '+token,
+      'Content-Type': 'application/json'
+    }
+  }).then(response=>{
   
       if (response.data.success===true) {
         alert(response.data.message)
@@ -189,14 +199,17 @@ export default class Menu extends  React.Component{
   }
   sendDelete(){
     const baseUrl = 'http://localhost:8000/';
-      //Todo el codigo para eliminar un user de la tabla 
-      axios.delete(baseUrl+'/api/auth/productos/'+this.state.idProducto)
+    const token = localStorage.getItem("access_token");
+      axios.delete(baseUrl+'api/auth/productos/'+this.state.idUser,{
+        headers: {
+          Authorization: 'Bearer '+token,
+          'Content-Type': 'application/json'
+        }
+      })
         .then(res => {
           this.loadData();
         })
         .catch(error=>{
-          console.log(error);
-          console.log(error.data);
           alert("Error 456"+error)
         })
   }

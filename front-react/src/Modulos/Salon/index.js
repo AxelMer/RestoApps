@@ -10,12 +10,6 @@ import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import { Table } from 'reactstrap';
-import { Input } from '@material-ui/core';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Checkbox from '@material-ui/core/Checkbox';
 
 
 export default class Salon extends React.Component{
@@ -73,17 +67,45 @@ loadData = (e) =>{
           alert("No se puede conectar con el servidor" + error)
         });
 }
-sendPedidos(){
-
-}
-
 dataMesa=(data)=>{
     this.setState({
       idMesa: data.id,
       estado: data.estado,
+      capacidad:data.capacidad,
       open:true,
     })
 }
+updateEstado = (e) =>{
+  const token = localStorage.getItem("access_token");
+  const formData = {
+  id: this.state.idMesa,
+  estado: this.state.estado,
+  }
+  const idU = this.state.idUser;
+  axios.put('http://localhost:8000/api/auth/user/'+idU,formData,{
+    headers: {
+      Authorization: 'Bearer '+token,
+      'Content-Type': 'application/json'
+    }
+  })
+    .then(response=>{
+        if (response.data.success===true) {
+          alert(response.data.message)
+          // para cargar datos de nuevo
+          this.loadData();
+          this.setState({
+            open: false,
+            idUser:'',
+            nombre:'',
+            usuario:'',
+            password:'',
+            credencial:'',
+          })
+        }
+      }).catch(error=>{
+        alert("Error 456"+error)
+      })
+    }
 renderList(){
     return this.state.lista.map((data)=>{
         return(
@@ -112,52 +134,31 @@ renderList(){
 render(){
         return(
             <div>
-            <Grid className='centrar'>
-                <Grid container item xs={20} spacing={1}>
-                    {this.renderList()}
-
+                <Grid className='centrar'>
+                    <Grid container item xs={12} spacing={1}>
+                        {this.renderList()}
+                    </Grid>
                 </Grid>
-            </Grid>
-                          <form>
+                  <form>
                           <Dialog open={this.state.open} onClose={this.closeModal} maxWidth="xl"  aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description"> 
                               <DialogContent>
                                   <div>
-                                    <Grid container spacing={3}>
-                                        <Grid item xs={12}>
-                                            
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <Table className="table" size="sm" aria-label="a dense table" >
-                                                <thead>
-                                                <tr>
-                                                    <th>Articulo</th>
-                                                    <th>Categoria</th>
-                                                    <th>Precio</th>
-                                                    <th>Cantidad</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {this.listTable()}
-                                                </tbody>
-
-                                            </Table>
-
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                          <h5>Numero de Mesa: {this.state.idMesa} </h5>
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                          <h5>Total:   </h5>
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <Button variant="contained" color="primary" >Realizar Pedido</Button>
-                                        </Grid>
-                                    </Grid>
+                                    <div>
+                                      <div>
+                                        <i><DeckIcon className="v" fontSize="medium" />{this.state.idMesa}</i>
+                                      </div>
+                                      <div>
+                                        <i><PeopleIcon fontSize="small"/>{this.state.capacidad}</i>
+                                      </div>
                                     </div>
+                                        <Grid>
+                                        <Button variant="contained" color="primary" >Ocupar Mesa</Button>
+                                        </Grid>
+                                  </div>
                               </DialogContent>
                           </Dialog>
-                        </form>
-                        </div>
+                  </form>
+            </div>
         )
     }
 }

@@ -77,7 +77,7 @@ render() {
                 required
                 fullWidth
                 id="cuenta"
-                label="Cuenta de usuario"
+                label="Usuario"
                 name="usuario"
                 value={this.state.usuario} 
                 onChange={this.cambiarUsuario} 
