@@ -24,13 +24,21 @@ class AuthController extends Controller
     }
 
     public function logout (Request $request) {
-
-        $token = $request->user()->token();
-        $token->revoke();
-    
-        $response = 'You have been succesfully logged out!';
-        return response($response, 200);
-    
+            $token = $request->header("Authorization");
+            // Invalidate the token
+            try {
+                JWTAuth::invalidate(JWTAuth::getToken());
+                    $response['message'] = "Has cerra la sesion";
+                    $response['success'] = true;
+              
+                    return $response;
+            } catch (JWTException $e) {
+                // something went wrong whilst attempting to encode the token
+                return response()->json([
+                "status" => "error", 
+                "message" => "Failed to logout, please try again."
+                ], 500);
+            }
     }
     protected function respondWithToken($token , $verify)
     {

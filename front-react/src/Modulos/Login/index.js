@@ -38,7 +38,6 @@ sendLogin = (e)=>{
     const token = response.data.access_token;
     this.setState({credencial: response.data.perfil});
       localStorage.clear();
-      console.log(token)
       localStorage.setItem('access_token', token);
       if(this.state.credencial.length && localStorage.length){
           this.state.credencial.forEach(data => {

@@ -36,7 +36,12 @@ const useStyles = makeStyles(theme => ({
   toolbar: theme.mixins.toolbar,
 }));
 
+
 export default function ClippedDrawer() {
+  function logout (){
+    localStorage.getItem("access_token");
+    window.location.href = `/`;
+  }
   const classes = useStyles();
   let valorText = ['Home', 'Adm. de Cuenta', 'Adm. Salon', 'Adm. Menu'];
   return (
@@ -49,7 +54,7 @@ export default function ClippedDrawer() {
           </Typography>
           <Typography variant="h6" component="span"  className={classes.title}>
           </Typography>
-          <Button className={classes.button} variant="contained" component="span" >
+          <Button className={classes.button}  onClick={logout} variant="contained" component="span" >
             Cerrar Sesion 
           </Button>
         </Toolbar>
