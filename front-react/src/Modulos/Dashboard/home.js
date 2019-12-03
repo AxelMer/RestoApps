@@ -6,6 +6,7 @@ import Appheader from '../../componentes/appHeader';
 export default class Home extends  React.Component{
     UNSAFE_componentWillMount(){
         if(localStorage.length === 0){
+            alert("Area Restringida");
             this.props.history.push('/');
         }
     }

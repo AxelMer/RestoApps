@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function ClippedDrawer() {
   function logout (){
-    localStorage.getItem("access_token");
+    localStorage.clear();
     window.location.href = `/`;
   }
   const classes = useStyles();

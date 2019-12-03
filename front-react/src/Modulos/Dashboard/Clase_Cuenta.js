@@ -40,7 +40,21 @@ export default class Cuentas extends  React.Component{
       this.changeEdit = this.changeEdit.bind(this);
   }
 //Metodo para cargar despues que un componente se invoque
-componentDidMount(){
+UNSAFE_componentWillMount(){
+  if(localStorage.length === 0){
+    alert("Area Restringida");
+      this.props.history.push('/');
+  }else{
+    setTimeout(
+      function() {
+        this.loadData()
+      }
+      .bind(this),
+      100
+  );
+  }
+}
+/*componentDidMount(){
   setTimeout(
     function() {
       this.loadData()
@@ -48,7 +62,7 @@ componentDidMount(){
     .bind(this),
     100
 );
-}
+}*/
   //
   handleChangeUsuario(event){
     this.setState({usuario: event.target.value})

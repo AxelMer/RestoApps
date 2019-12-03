@@ -28,8 +28,21 @@ export default class Salon extends  React.Component{
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
   }
-
-componentDidMount(){
+  UNSAFE_componentWillMount(){
+    if(localStorage.length === 0){
+      alert("Area Restringida");
+        this.props.history.push('/');
+    }else{
+      setTimeout(
+        function() {
+          this.loadData()
+        }
+        .bind(this),
+        100
+    );
+    }
+  }
+/*componentDidMount(){
   setTimeout(
     function() {
       this.loadData()
@@ -37,7 +50,7 @@ componentDidMount(){
     .bind(this),
     1000
 );
-}
+}*/
 //Los cambios de los inputs
 handleChangeCapacidad(event){
   this.setState({capacidad: event.target.value})
